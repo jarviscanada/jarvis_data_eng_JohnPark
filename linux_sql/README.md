@@ -11,33 +11,40 @@ This project aims to build an automated software that can record the hardware sp
 First navigate to root directory of this project. The root directory of this project is `linux_sql` directory
 
 - Start a psql instance using psql_docker.sh
-
 ```
 bash ./scripts/psql_docker.sh create [username] [password]
-
-# [side] To start or stop the psql instance docker
-bash ./scripts/psql_docker.sh [start|stop] jrvs-psql 
 ``` 
+
+- [side] To start or stop the psql instance docker
+```
+bash ./scripts/psql_docker.sh [start|stop] jrvs-psql 
+```
 
 - Create tables using ddl.sql
 ```
-
+psql -h localhost -U postgres -d host_agent -f sql/ddl.sql
 ```
 
 - Insert hardware specs data into the DB using host_info.sh
 ```
-
+bash ./scripts/host_info.sh psql_hostname psql_port db_name psql_user psql_password
 ```
 
 - Insert hardware usage data into the DB using host_usage.sh
 ```
-
+bash ./scripts/host_usage.sh psql_hostname psql_port db_name psql_user psql_password
 ```
 
 - Crontab setup
 ```
-
+crontab -e
 ```
+
+- Then, after directed to vim editor to input the task crontab will run. Type,
+```
+* * * * * bash $(pwd)/scripts/host_usage.sh psql_hostname psql_port db_name psql_user psql_password
+```
+
 
 # Implemenation
 Discuss how you implement the project.
@@ -72,5 +79,5 @@ How did you deploy your app? (e.g. Github, crontab, docker)
 Write at least three things you want to improve 
 e.g. 
 - handle hardware update 
-- blah
+- Although it is MVP, it is crucial that  
 - blah
