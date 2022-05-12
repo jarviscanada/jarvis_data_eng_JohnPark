@@ -12,14 +12,32 @@ First navigate to root directory of this project. The root directory of this pro
 
 - Start a psql instance using psql_docker.sh
 
-`` 
-./scripts/psql_docker.sh create [username] [password]
-``
+```
+bash ./scripts/psql_docker.sh create [username] [password]
+
+# [side] To start or stop the psql instance docker
+bash ./scripts/psql_docker.sh [start|stop] jrvs-psql 
+``` 
 
 - Create tables using ddl.sql
+```
+
+```
+
 - Insert hardware specs data into the DB using host_info.sh
+```
+
+```
+
 - Insert hardware usage data into the DB using host_usage.sh
+```
+
+```
+
 - Crontab setup
+```
+
+```
 
 # Implemenation
 Discuss how you implement the project.
