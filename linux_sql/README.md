@@ -40,7 +40,7 @@ bash ./scripts/host_usage.sh [psql hostname] [psql port] [database name] [psql u
 crontab -e
 ```
 
-- After directed to vim editor, input the task crontab will run
+- After directed to vim editor, input the task crontab will run <br/>
 ``` 
 * * * * * bash ./scripts/host_usage.sh [psql hostname] [psql port] [database name] [psql user] [psql password]
 ```
@@ -51,6 +51,15 @@ In order to structure and implement this project, a simplified version of the De
 
 In addition to dividing the project into different phases, agile development methodology was used to perform day-to-day software development. The frameworks generated out of Agile principles and utilized in this project are Scrum and Kanban.
 
+The software is composed of two components – a database, and a monitoring agent. 
+
+To establish a database in the system, a docker container which contains a PostgreSQL instance was used. 
+-	The `psql_docker.sh` automates the generation of PostgreSQL instance and running in the background of the machine. 
+-	The `ddl.sql` automates the database initialization and data tables set up.
+  
+The monitoring agent is composed of two scripts and a crontab. 
+-	The two scripts, `host_info.sh` and `host_usage.sh` are used to gather data about host hardware specification and resource usage info. 
+-	The crontab is put in operation to automatically run `host_info.sh` and `host_usage.sh` every minute to accumulate data.
 
 
 ## Architecture
@@ -61,12 +70,34 @@ Diagram showing overall architecture and design of LCA project.
 
 
 ## Scripts
-Shell script description and usage (use markdown code block for script usage)
-- psql_docker.sh
-- host_info.sh
-- host_usage.sh
-- crontab
-- queries.sql (describe what business problem you are trying to resolve)
+- psql_docker.sh - Instantiates docker container containing PSQL database <br/> 
+usage:
+```
+bash ./scripts/psql_docker.sh create|start|stop db_username db_password
+```
+- host_info.sh <br/>
+usage:
+```
+bash ./scripts/host_info.sh psql_host psql_port db_name psql_user psql_password
+```
+- host_usage.sh <br/>
+usage:
+```
+bash ./scripts/host_usage.sh psql_host psql_port db_name psql_user psql_password
+```
+- crontab <br/>
+usage:
+```
+crontab -e 
+* * * * * bash /pwd/scripts/host_usage.sh psql_host psql_port db_name psql_user psql_password
+```
+- queries.sql <br/>
+usage:
+```
+psql -h host_name -p psql_port -U psql_user  -p psql_password -d host_agent -f /sql/queries.sql
+```
+
+
 
 ## Database Modeling
 - `host_info`
@@ -104,6 +135,7 @@ How did you test your bash scripts and SQL queries? What was the result?
 How did you deploy your app? (e.g. Github, crontab, docker)
 
 # Improvements
-- Although it is MVP, it is crucial that communication do happen across the network switch and how database can retrieve data from network switch. It could have been better if we had another host with network switch to simulate this situation.   
+- Although it is MVP, it is crucial that communication do happen across the network switch and how database can retrieve data from network switch. It could have been better if we had another host with network switch to simulate this situation   
 - Need better test cases which examine how the app will behave in various cases
-- Recording hardware usage every minute and storing in database may take up too much space in the database. It would be better to find a way to condense those information. For example, maybe software can average up the usage over 15 minutes. 
+- Recording hardware usage every minute and storing in database may take up too much space in the database. It would be better to find a way to condense those information. For example, maybe software can average up the usage over 15 minutes
+- Could use `/tmp/host_usage` to somehow inform the system if there was an error in inserting the usage data to the database
