@@ -72,9 +72,9 @@ Diagram showing overall architecture and design of LCA project.
 ## Scripts
 - psql_docker.sh - Instantiates docker container containing PSQL database <br/> 
 usage:
-```
+``
 bash ./scripts/psql_docker.sh create|start|stop db_username db_password
-```
+``
 - host_info.sh <br/>
 usage:
 ```
