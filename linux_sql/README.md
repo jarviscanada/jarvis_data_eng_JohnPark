@@ -137,7 +137,8 @@ The tool used to test were Virtual Machine Instance from Google Cloud Platform, 
 
 
 # Deployment
-The deployment of the application was accomplished by publishing its codes and setup instructions in Github’s remote repository. Therefore, the MVP of this product can be easily accessed and utilized by the Jarvis LCA team.
+The deployment of the application was accomplished by publishing its codes and setup instructions in Github’s remote repository. Therefore, the MVP of this product can be easily accessed and utilized by the Jarvis LCA team. Furthermore, the app can be straightforwardly shared with anyone with proper access rights through the Github URL.
+
 
 # Improvements
 - Although it is MVP, it is crucial that communication do happen across the network switch and how database can retrieve data from network switch. It could have been better if we had another host with network switch to simulate this situation   
