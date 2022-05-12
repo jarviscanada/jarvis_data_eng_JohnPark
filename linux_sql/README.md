@@ -2,12 +2,20 @@
 This project is under development. Since this project follows the GitFlow, the final work will be merged to the master branch after Team Code Team.
 
 # Introduction
-(about 150-200 words)
-Discuss the design of the project. What does this project/product do? Who are the users? What are the technologies you have used? (e.g. bash, docker, git, etc..)
+A Linux cluster is a connected array of Linux computers or nodes that operate together to function as a single system. Each of the nodes or computers is connected through a local area network. For the sake of managing multiple machines, each machine needs to share information and record the shared information in a database.
+
+This project aims to build an automated software that can record the hardware specification of each node and monitor its resource usage of them. The software will store the retrieved data from each node in an RDBMS database. This software will help the users of a Linux cluster analyze the hardware usages of different nodes and plan to allocate the resource in an economical manner. 
+
 
 # Quick Start
-Use markdown code block for your quick-start commands
+First navigate to root directory of this project. The root directory of this project is `linux_sql` directory
+
 - Start a psql instance using psql_docker.sh
+
+`` 
+./scripts/psql_docker.sh create [username] [password]
+``
+
 - Create tables using ddl.sql
 - Insert hardware specs data into the DB using host_info.sh
 - Insert hardware usage data into the DB using host_usage.sh
@@ -15,6 +23,7 @@ Use markdown code block for your quick-start commands
 
 # Implemenation
 Discuss how you implement the project.
+
 ## Architecture
 Diagram showing overall architecture and design of LCA project.
 <p align="center">
