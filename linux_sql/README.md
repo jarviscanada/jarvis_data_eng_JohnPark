@@ -75,23 +75,23 @@ usage:
 ```
 bash ./scripts/psql_docker.sh create|start|stop db_username db_password
 ```
-- host_info.sh <br/>
+- host_info.sh - Acquire hardware specification of host and inserts the info into the database  <br/>
 usage:
 ```
 bash ./scripts/host_info.sh psql_host psql_port db_name psql_user psql_password
 ```
-- host_usage.sh <br/>
+- host_usage.sh - Acquire resource usage of host and inserts the info into the database<br/>
 usage:
 ```
 bash ./scripts/host_usage.sh psql_host psql_port db_name psql_user psql_password
 ```
-- crontab <br/>
+- crontab - A job scheduler, used to automatically store data into database every minute<br/>
 usage:
 ```
 crontab -e 
 * * * * * bash /pwd/scripts/host_usage.sh psql_host psql_port db_name psql_user psql_password
 ```
-- queries.sql <br/>
+- queries.sql - Contains SQL codes which query data for analysis of usages and error <br/>
 usage:
 ```
 psql -h host_name -p psql_port -U psql_user  -p psql_password -d host_agent -f /sql/queries.sql
@@ -129,10 +129,15 @@ psql -h host_name -p psql_port -U psql_user  -p psql_password -d host_agent -f /
 
 
 # Test
-How did you test your bash scripts and SQL queries? What was the result?
+The proper function of the monitoring agent was confirmed through manual regression testing. Different test cases and examples were fed into the scripts `host_info.sh` and `host_usage.sh` to assure that the inputs were stored in the database correctly. The proper function of the crontab was tested by querying the `host_usage` table confirming that the data was inserted every minute.
+
+The proper setup of the database was confirmed through manual regression testing as well. After running `psql_docker.sh`, it was confirmed that the database, tables and parameters were set up correctly.
+
+The tool used to test were Virtual Machine Instance from Google Cloud Platform, Terminal.app and intelliJ IDEA ultimate
+
 
 # Deployment
-How did you deploy your app? (e.g. Github, crontab, docker)
+The deployment of the application was accomplished by publishing its codes and setup instructions in Github’s remote repository. Therefore, the MVP of this product can be easily accessed and utilized by the Jarvis LCA team.
 
 # Improvements
 - Although it is MVP, it is crucial that communication do happen across the network switch and how database can retrieve data from network switch. It could have been better if we had another host with network switch to simulate this situation   
