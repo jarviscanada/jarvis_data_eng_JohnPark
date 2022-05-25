@@ -23,11 +23,12 @@ public class LambdaStreamExcImp implements LambdaStreamExc {
     lambdaStreamExcImp.toUpperCase("hi", "my", "name", "is").forEach(System.out::println);
 
     System.out.println("============lambdaStreamExcImp Test============");
-    Stream<String> filterTestStream = lambdaStreamExcImp.createStrStream("Tell", "Tri", "Track", "Treck", "Tmp", "Thought");
+    Stream<String> filterTestStream = lambdaStreamExcImp.createStrStream("Tell", "Tri", "Track",
+        "Treck", "Tmp", "Thought");
     lambdaStreamExcImp.filter(filterTestStream, "Tr").forEach(System.out::println);
 
     System.out.println("============createIntStream Test============");
-    int[] tmp = {1,2,3,4,5};
+    int[] tmp = {1, 2, 3, 4, 5};
     lambdaStreamExcImp.createIntStream(tmp).forEach(System.out::println);
 
     System.out.println("==========printMessages Test===========");
@@ -35,9 +36,9 @@ public class LambdaStreamExcImp implements LambdaStreamExc {
     lambdaStreamExcImp.printMessages(messages, lambdaStreamExcImp.getLambdaPrinter("msg:", "!"));
 
     System.out.println("==========flatNestedInt Test===========");
-    int[] tmp1 = {1,2,3};
-    int[] tmp2 = {3,2,1};
-    Stream<List<Integer>> nestedInts = Stream.of(Arrays.asList(1,2,3), Arrays.asList(1,2,3));
+    int[] tmp1 = {1, 2, 3};
+    int[] tmp2 = {3, 2, 1};
+    Stream<List<Integer>> nestedInts = Stream.of(Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3));
     lambdaStreamExcImp.flatNestedInt(nestedInts).forEach(System.out::println);
 
   }
@@ -84,7 +85,7 @@ public class LambdaStreamExcImp implements LambdaStreamExc {
 
   @Override
   public IntStream getOdd(IntStream intStream) {
-    return intStream.filter(i -> i%2 != 0);
+    return intStream.filter(i -> i % 2 != 0);
   }
 
   @Override
@@ -94,10 +95,10 @@ public class LambdaStreamExcImp implements LambdaStreamExc {
 
   @Override
   public void printMessages(String[] messages, Consumer<String> printer) {
-/*
- * String[] messages = {"a", "b", "c"};
- * lse.printMessages(messages, lse.getLambdaPrinter("msg:", "!"));
- */
+    /*
+     * String[] messages = {"a", "b", "c"};
+     * lse.printMessages(messages, lse.getLambdaPrinter("msg:", "!"));
+     */
     createStrStream(messages).forEach(printer);
   }
 

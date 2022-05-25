@@ -45,7 +45,7 @@ public class JavaGrepImpl implements JavaGrep {
 
   @Override
   public void process() throws IOException {
-    List<String> matchedLines = new ArrayList<String>();
+    List<String> matchedLines = new ArrayList<>();
 
     for (File file : listFiles(getRootPath())) {
       for (String line : readLines(file)) {
@@ -104,7 +104,7 @@ public class JavaGrepImpl implements JavaGrep {
   @Override
   public void writeToFile(List<String> lines) throws IOException {
 
-    File file = new File(this.outFile);
+    File file = new File(getOutFile());
     FileOutputStream out = new FileOutputStream(file, true);
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
     try {
