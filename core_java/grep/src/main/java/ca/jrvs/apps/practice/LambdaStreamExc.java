@@ -55,7 +55,7 @@ public interface LambdaStreamExc {
   <E> List<E> toList(Stream<E> stream);
 
   /**
-   * Convert a intStrea to list
+   * Convert a intStream to list
    * @param intStream
    * @return
    */
