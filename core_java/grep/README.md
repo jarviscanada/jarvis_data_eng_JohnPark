@@ -56,10 +56,10 @@ Download and install IntelliJ as instructed from the IntelliJ website. Then, Dow
 
 Store this pom.xml file in `grep` folder. 
 
-###1. Using IntelliJ IDE 
+##1. Using IntelliJ IDE 
 Ensure Maven structure project format is applied. Using intelliJ navigate to either `JavaGrepImpl` or `JavaGrepLambdaImpl` using the project tab on the left. Then, set the run configuration with the arguments `<regex pattern> <source folder> <output file>`. Then, run the main class in the file.  
 
-###2. Using `Jar` file 
+##2. Using `Jar` file 
 If one wishes to run the app through the `Jar` file, first build a `Uber/Fat Jar` file for the app:
 ```
 mvn clean package
@@ -70,7 +70,7 @@ Then, run the following command:
 java -jar ./target/grep-1.0-SNAPSHOT.jar <regex expression> <path to folder> <path to output file>
 ```
 
-###3. Using Docker
+##3. Using Docker
 Pull the image from the docker hub,
 ```
 docker pull johnphk/grep
