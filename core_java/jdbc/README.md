@@ -1,7 +1,7 @@
 # Introduction
 This is a Java Database Connectivity (JDBC) app, an application This is a Java Database Connectivity (JDBC) app, an application programming interface (API) built using Java and provides a service to access the database with create, read, update, and delete (CRUD) operations. This app is developed specifically to connect and exchange data with PostgreSQL (PSQL) database. IntelliJ combined with Maven was utilized to set up, develop and implement the application. Furthermore, docker was used for hosting a PSQL database to test the app's functionality and examine its interaction with the hosted database.   
 
-# Implementaiton
+# Implementation
 ## ER Diagram
 ![ER Diagram](./assets/jdbc_er_diagram.png)
 
