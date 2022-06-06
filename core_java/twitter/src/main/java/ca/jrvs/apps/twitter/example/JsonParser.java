@@ -48,6 +48,8 @@ public class JsonParser {
     System.out.println("===========================");
     Company company = toObjectFromJson(companyStr, Company.class);
     System.out.println(company);
+    System.out.println(company.getCompanyName());
+    System.out.println(company.getCeo());
     System.out.println("==================================================");
     System.out.println(toJson(company, true, false));
     System.out.println(toJson(company, false, false));
