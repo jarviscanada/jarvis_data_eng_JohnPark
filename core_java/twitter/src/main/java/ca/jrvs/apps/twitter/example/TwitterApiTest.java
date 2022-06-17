@@ -23,7 +23,7 @@ public class TwitterApiTest {
     OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
     consumer.setTokenWithSecret(ACCESS_TOKEN, TOKEN_SECRET);
 
-    // Create an HTTP GET request
+    // Create an HTTP GET?? request - This seems POST
     String status = "today is is a good day";
     PercentEscaper percentEscaper = new PercentEscaper("", false);
     HttpPost request = new HttpPost(
