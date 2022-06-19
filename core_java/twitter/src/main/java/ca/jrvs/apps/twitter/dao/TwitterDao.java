@@ -1,11 +1,15 @@
 package ca.jrvs.apps.twitter.dao;
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
+import ca.jrvs.apps.twitter.example.JsonParser;
 import ca.jrvs.apps.twitter.model.Tweet;
+import ca.jrvs.apps.twitter.util.JsonUtil;
 import com.google.gdata.util.common.base.PercentEscaper;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TwitterDao implements CrdDao<Tweet, String> {
@@ -88,7 +92,34 @@ public class TwitterDao implements CrdDao<Tweet, String> {
     return new URI(API_BASE_URI + DELETE_PATH + id + ".json");
   }
 
-  private Tweet parseResponseBody(HttpResponse response, int httpOk) {
-    return null;
+  private Tweet parseResponseBody(HttpResponse response, int expectedStatusCode) {
+    Tweet tweet;
+
+    // Check response status
+    int status = response.getStatusLine().getStatusCode();
+    if (status != expectedStatusCode) {
+      throw new RuntimeException("Unexpected HTTP status: " + status);
+    }
+
+    if (response.getEntity() == null) {
+      throw new RuntimeException("Empty response body");
+    }
+
+    //Convert Response Entity to str
+    String jsonStr;
+    try {
+      jsonStr = EntityUtils.toString(response.getEntity());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to convert entity to String", e);
+    }
+
+    // Deserialize JSON string to Tweet object
+    try {
+      tweet = JsonUtil.toObjectFromJson(jsonStr, Tweet.class);
+    } catch (IOException e) {
+      throw new RuntimeException("Unable to convert JSON str to Object", e);
+    }
+
+    return tweet;
   }
 }
