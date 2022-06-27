@@ -12,7 +12,6 @@ import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.util.JsonUtil;
-import ca.jrvs.apps.twitter.util.TweetUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Test;
@@ -83,6 +82,8 @@ public class TwitterDaoUnitTest {
     tweet = spyDao.create(tweet);
     assertNotNull(tweet);
     assertNotNull(tweet.getText());
+    assertEquals(tweet, expectedTweet);
+
   }
 
   @Test
@@ -121,6 +122,8 @@ public class TwitterDaoUnitTest {
     tweet = spyDao.findById("1");
     assertNotNull(tweet);
     assertNotNull(tweet.getText());
+    assertEquals(tweet, expectedTweet);
+
   }
 
   @Test
@@ -161,6 +164,8 @@ public class TwitterDaoUnitTest {
     tweet = spyDao.deleteById("1");
     assertNotNull(tweet);
     assertNotNull(tweet.getText());
+    assertEquals(tweet, expectedTweet);
+
   }
 }
 
