@@ -1,16 +1,28 @@
 package ca.jrvs.apps.twitter.dao;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
+import ca.jrvs.apps.twitter.model.Coordinates;
+import ca.jrvs.apps.twitter.model.Tweet;
+import ca.jrvs.apps.twitter.util.JsonUtil;
 import ca.jrvs.apps.twitter.util.TweetUtil;
+import java.io.IOException;
+import java.util.ArrayList;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TwitterDaoUnitTest {
   @Mock
   HttpHelper mockHelper;
@@ -18,48 +30,137 @@ public class TwitterDaoUnitTest {
   @InjectMocks
   TwitterDao dao;
 
-  @Test
-  public void create() {
-  }
+
+  // Test correct JSON
 
   @Test
-  public void findById() {
-  }
-
-  @Test
-  public void deleteById() {
-  }
-
-
-
-  @Test
-  public void showTweet() throws Exception {
-    //test failed request
+  public void create() throws Exception {
+    // Test failed request
     String hashTag = "#abc";
-    String text = "@someone sometext " + hashTag + " " + System.currentTimeMillis();
-    Double lon = -1d;
+    String text = "@someone sometext" + hashTag + " " + System.currentTimeMillis();
     Double lat = 1d;
-    //exception is expected here
+    Double lon = -1d;
+
+    //Exception is expected here
     when(mockHelper.httpPost(isNotNull())).thenThrow(new RuntimeException("mock"));
+
+    Tweet tweet = new Tweet();
+    tweet.setText(text);
+    Coordinates coordinates = new Coordinates();
+    coordinates.setCoordinates(new ArrayList<Double>() {{
+      add(lon);
+      add(lat);
+    }});
+    tweet.setCoordinates(coordinates);
+
     try {
-      dao.create(TweetUtil.buildTweet(text, lon, lat));
+      dao.create(tweet);
       fail();
-    } catch (RuntimeException e) {
+    } catch(RuntimeException e) {
       assertTrue(true);
     }
 
-    //Test happy path
-    //however, we don't want to call parseResponseBody.
-    //we will make a spyDao which can fake parseResponseBody return value
-//    String tweetJsonStr = "{\n"
-//        + "    \"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
-//        + "    \"id\":1097607853932564480,\n"
-//        + "    \"id_str\":\"1097607853932564480\",\n"
-//        + "    \"
-//        + "}";
+    String tweetJsonStr = "{\n"
+        + "\"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
+        + "\"id\":1097607853932564480,\n"
+        + "\"text\":\"Test\",\n"
+        + "\"entities\" : {\n"
+        + "    \"hashtags\":[],"
+        + "    \"user_mentions\":[]"
+        + "    },\n"
+        + "\"coordinates\":null,\n"
+        + "\"retweet_count\":0,\n"
+        + "\"favorite_count\":0,\n"
+        + "\"favorited\":false,\n"
+        + "\"retweeeted\":false\n"
+        + "}";
+
+    when(mockHelper.httpPost(isNotNull())).thenReturn(null);
+    TwitterDao spyDao = Mockito.spy(dao);
+    Tweet expectedTweet = JsonUtil.toObjectFromJson(tweetJsonStr, Tweet.class);
+    // Mock parseResponseBody
+    doReturn(expectedTweet).when(spyDao).parseResponseBody(any(), anyInt());
+    tweet = spyDao.create(tweet);
+    assertNotNull(tweet);
+    assertNotNull(tweet.getText());
   }
 
+  @Test
+  public void findById() throws IOException {
+    when(mockHelper.httpGet(isNotNull())).thenThrow(new RuntimeException("mock"));
 
+    try {
+      dao.findById("1");
+      fail();
+    } catch(RuntimeException e) {
+      assertTrue(true);
+    }
 
+    String tweetJsonStr = "{\n"
+        + "\"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
+        + "\"id\":1,\n"
+        + "\"text\":\"Test\",\n"
+        + "\"entities\" : {\n"
+        + "    \"hashtags\":[],"
+        + "    \"user_mentions\":[]"
+        + "    },\n"
+        + "\"coordinates\":null,\n"
+        + "\"retweet_count\":0,\n"
+        + "\"favorite_count\":0,\n"
+        + "\"favorited\":false,\n"
+        + "\"retweeeted\":false\n"
+        + "}";
+
+    Tweet tweet;
+    when(mockHelper.httpGet(isNotNull())).thenReturn(null);
+    TwitterDao spyDao = Mockito.spy(dao);
+    Tweet expectedTweet = JsonUtil.toObjectFromJson(tweetJsonStr, Tweet.class);
+
+    // Mock parseResponseBody
+    doReturn(expectedTweet).when(spyDao).parseResponseBody(any(), anyInt());
+    tweet = spyDao.findById("1");
+    assertNotNull(tweet);
+    assertNotNull(tweet.getText());
+  }
+
+  @Test
+  public void deleteById() throws IOException {
+    //Exception is expected here
+    when(mockHelper.httpPost(isNotNull())).thenThrow(new RuntimeException("mock"));
+
+    try {
+      dao.deleteById("1");
+      fail();
+    } catch(RuntimeException e) {
+      assertTrue(true);
+    }
+
+    String tweetJsonStr = "{\n"
+        + "\"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
+        + "\"id\":1,\n"
+        + "\"text\":\"Test\",\n"
+        + "\"entities\" : {\n"
+        + "    \"hashtags\":[],"
+        + "    \"user_mentions\":[]"
+        + "    },\n"
+        + "\"coordinates\":null,\n"
+        + "\"retweet_count\":0,\n"
+        + "\"favorite_count\":0,\n"
+        + "\"favorited\":false,\n"
+        + "\"retweeeted\":false\n"
+        + "}";
+
+    Tweet tweet;
+
+    when(mockHelper.httpPost(isNotNull())).thenReturn(null);
+    TwitterDao spyDao = Mockito.spy(dao);
+    Tweet expectedTweet = JsonUtil.toObjectFromJson(tweetJsonStr, Tweet.class);
+
+    // Mock parseResponseBody
+    doReturn(expectedTweet).when(spyDao).parseResponseBody(any(), anyInt());
+    tweet = spyDao.deleteById("1");
+    assertNotNull(tweet);
+    assertNotNull(tweet.getText());
+  }
 }
 

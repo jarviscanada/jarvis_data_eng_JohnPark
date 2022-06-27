@@ -65,11 +65,13 @@ public class TwitterDao implements CrdDao<Tweet, String> {
   @Override
   public Tweet deleteById(String s) {
     URI uri;
+
     try {
       uri = getDeleteUri(s);
     } catch (URISyntaxException e) {
       throw new RuntimeException("Invalid id: " + s, e);
     }
+
     HttpResponse response = httpHelper.httpPost(uri);
     return parseResponseBody(response, HTTP_OK);
   }
@@ -78,8 +80,8 @@ public class TwitterDao implements CrdDao<Tweet, String> {
     String uriStringFormat = API_BASE_URI + POST_PATH + QUERY_SYM;
     PercentEscaper percentEscaper = new PercentEscaper("", false);
     uriStringFormat += "status" + EQUAL + percentEscaper.escape(tweet.getText());
-    uriStringFormat += AMPERSAND + "lat" + EQUAL + tweet.getCoordinates().getCoordinates().get(0);
-    uriStringFormat += AMPERSAND + "long" + EQUAL + tweet.getCoordinates().getCoordinates().get(1);
+    uriStringFormat += AMPERSAND + "long" + EQUAL + tweet.getCoordinates().getCoordinates().get(0);
+    uriStringFormat += AMPERSAND + "lat" + EQUAL + tweet.getCoordinates().getCoordinates().get(1);
 
     return new URI(uriStringFormat);
   }
@@ -89,10 +91,10 @@ public class TwitterDao implements CrdDao<Tweet, String> {
   }
 
   private URI getDeleteUri(String id) throws URISyntaxException {
-    return new URI(API_BASE_URI + DELETE_PATH + id + ".json");
+    return new URI(API_BASE_URI + DELETE_PATH + "/" + id + ".json");
   }
 
-  private Tweet parseResponseBody(HttpResponse response, int expectedStatusCode) {
+  public Tweet parseResponseBody(HttpResponse response, int expectedStatusCode) {
     Tweet tweet;
 
     // Check response status
