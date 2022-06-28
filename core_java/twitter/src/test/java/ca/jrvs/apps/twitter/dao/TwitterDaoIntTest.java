@@ -12,7 +12,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TwitterDaoIntTest {
+
   private TwitterDao dao;
+  private Tweet tweet;
+  private String text;
+  private Double lat;
+  private Double lon;
+
+
   @Before
   public void setUp() {
     String consumerKey = System.getenv("consumerKey");
@@ -22,69 +29,45 @@ public class TwitterDaoIntTest {
 
     System.out.println(consumerKey + "|" + consumerSecret + "|" + accessToken + "|" + tokenSecret);
     //set up dependency
-    HttpHelper httpHelper = new TwitterHttpHelper(consumerKey, consumerSecret, accessToken, tokenSecret);
+    HttpHelper httpHelper = new TwitterHttpHelper(consumerKey, consumerSecret, accessToken,
+        tokenSecret);
     //pass dependency
     this.dao = new TwitterDao(httpHelper);
-  }
 
-//  @After
-//  public void tearDown() {
-//    assertNotNull(id);
-//    Tweet response = dao.deleteById(id.toString());
-//
-//    // Test that deleting a tweet worked
-//    testResponse(response);
-//  }
-
-  @Test
-  public void create() throws Exception {
     String hashTag = "#abc";
-    String text = "@someone sometext" + hashTag + " " + System.currentTimeMillis();
-    Double lat = 1d;
-    Double lon = -1d;
-    Tweet postTweet = TweetUtil.buildTweet(text, lon, lat);
-    System.out.println(JsonUtil.toPrettyJson(postTweet));
-
-    Tweet tweet = dao.create(postTweet);
-
-    testHelper(text, tweet, lon, lat);
-
-    Tweet toDeleteTweet = dao.deleteById(tweet.getId().toString());
-
-    testHelper(text, toDeleteTweet, lon, lat);
+    text = "@someone sometext" + hashTag + " " + System.currentTimeMillis();
+    lat = 1d;
+    lon = -1d;
+    tweet = TweetUtil.buildTweet(text, lon, lat);
   }
 
   @Test
-  public void findById() throws Exception {
-    String hashTag = "#abc";
-    String text = "@someone sometext" + hashTag + " " + System.currentTimeMillis();
-    Double lat = 1d;
-    Double lon = -1d;
-    Tweet postTweet = TweetUtil.buildTweet(text, lon, lat);
-    System.out.println(JsonUtil.toPrettyJson(postTweet));
+  public void createFindAndDelete() throws Exception {
+    //Create
+    Tweet createResponse = dao.create(tweet);
+    testHelper(createResponse);
 
-    Tweet response = dao.create(postTweet);
+    String id = createResponse.getIdStr();
 
-    Long id = response.getId();
-    response = dao.findById(id.toString());
+    //Find
+    Tweet findByIdResponse = dao.findById(id);
+    testHelper(findByIdResponse);
 
-    testHelper(text, response, lon, lat);
-
-    Tweet toDeleteTweet = dao.deleteById(response.getId().toString());
-
-    testHelper(text, toDeleteTweet, lon, lat);
-
+    //Delete or cleanup
+    Tweet deleteByIdResponse = dao.deleteById(id);
+    testHelper(deleteByIdResponse);
   }
 
-  public void testHelper(String text, Tweet tweet, Double lon, Double lat) {
-    assertEquals(text, tweet.getText());
 
-    assertNotNull(tweet.getId());
-    assertNotNull(tweet.getCoordinates());
+  public void testHelper(Tweet response) {
+    assertEquals(text, response.getText());
 
-    assertEquals(2, tweet.getCoordinates().getCoordinates().size());
-    assertEquals(lon, tweet.getCoordinates().getCoordinates().get(0));
-    assertEquals(lat, tweet.getCoordinates().getCoordinates().get(1));
+    assertNotNull(response.getId());
+    assertNotNull(response.getCoordinates());
+
+    assertEquals(2, response.getCoordinates().getCoordinates().size());
+    assertEquals(lon, response.getCoordinates().getCoordinates().get(0));
+    assertEquals(lat, response.getCoordinates().getCoordinates().get(1));
   }
 
 

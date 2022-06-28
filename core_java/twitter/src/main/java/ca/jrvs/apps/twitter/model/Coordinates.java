@@ -24,7 +24,7 @@ public class Coordinates {
   @JsonProperty("coordinates")
   private List<Double> coordinates;
 
-  @JsonProperty("coordinates")
+  @JsonProperty("type")
   private String type;
 
   @JsonIgnore
