@@ -7,7 +7,7 @@ import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.util.JsonUtil;
 import ca.jrvs.apps.twitter.util.TweetUtil;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class TwitterDaoIntTest {
     this.dao = new TwitterDao(httpHelper);
 
     String hashTag = "#abc";
-    text = "@someone sometext" + hashTag + " " + System.currentTimeMillis();
+    text = "@someone sometext " + hashTag + " " + System.currentTimeMillis();
     lat = 1d;
     lon = -1d;
     tweet = TweetUtil.buildTweet(text, lon, lat);
@@ -44,7 +44,11 @@ public class TwitterDaoIntTest {
   @Test
   public void createFindAndDelete() throws Exception {
     //Create
+    System.out.println("test");
+    System.out.println(JsonUtil.toPrettyJson(tweet));
     Tweet createResponse = dao.create(tweet);
+    System.out.println("test2");
+    System.out.println(JsonUtil.toPrettyJson(createResponse));
     testHelper(createResponse);
 
     String id = createResponse.getIdStr();
@@ -68,6 +72,7 @@ public class TwitterDaoIntTest {
     assertEquals(2, response.getCoordinates().getCoordinates().size());
     assertEquals(lon, response.getCoordinates().getCoordinates().get(0));
     assertEquals(lat, response.getCoordinates().getCoordinates().get(1));
+    assertTrue("#abc".contains(response.getEntities().getHashtags().get(0).getText()));
   }
 
 

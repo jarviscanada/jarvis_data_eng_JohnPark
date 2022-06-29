@@ -50,6 +50,13 @@ public class TwitterController implements Controller {
 
   @Override
   public Tweet showTweet(String[] args) {
+    try {
+      Long.parseLong(args[1]);
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          "USAGE: TwitterCLIApp show tweet_id [fields] - tweet_id must be a whole number");
+    }
+
     if (args.length < 2 || !args[0].equals("show")) {
       throw new IllegalArgumentException(
           "USAGE: TwitterCLIApp show tweet_id [fields]");
@@ -63,7 +70,7 @@ public class TwitterController implements Controller {
   @Override
   public List<Tweet> deleteTweet(String[] args) {
     if(args.length < 2 || !args[0].equals("delete")) {
-      throw new RuntimeException("USAGE: TwitterCLIApp delete [one id or more ids]");
+      throw new IllegalArgumentException("USAGE: TwitterCLIApp delete [one id or more ids]");
     }
 
     return service.deleteTweets(Arrays.copyOfRange(args, 1, args.length));

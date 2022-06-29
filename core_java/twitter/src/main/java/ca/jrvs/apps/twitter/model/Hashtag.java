@@ -25,7 +25,7 @@ public class Hashtag {
   private String text;
 
   @JsonProperty("indices")
-  private List<Long> indices;
+  private List<Long> indices = null;
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new HashMap<String, Object>();

@@ -9,7 +9,6 @@ import java.io.IOException;
 public class JsonUtil {
   public static <T> T toObjectFromJson(String JsonStr, Class<T> clazz) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
-    System.out.println(JsonStr);
     return mapper.readValue(JsonStr, clazz);
   }
   public static String toPrettyJson(Tweet tweet) throws JsonProcessingException {

@@ -36,7 +36,7 @@ public class TwitterDaoUnitTest {
   public void create() throws Exception {
     // Test failed request
     String hashTag = "#abc";
-    String text = "@someone sometext" + hashTag + " " + System.currentTimeMillis();
+    String text = "@someone sometext " + hashTag + " " + System.currentTimeMillis();
     Double lat = 1d;
     Double lon = -1d;
 
