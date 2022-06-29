@@ -21,6 +21,5 @@ public class OddEvenTest {
     assertEquals("odd", testOdd);
     String testEven = oddEven.oddEvenBit(2);
     assertEquals("even", testEven);
-
   }
 }
