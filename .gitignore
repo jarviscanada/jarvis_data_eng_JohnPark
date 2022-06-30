@@ -14,3 +14,9 @@ target/
 .DS_Store
 out/
 log/
+
+
+*.settings/
+*.project
+*.classpath
+
