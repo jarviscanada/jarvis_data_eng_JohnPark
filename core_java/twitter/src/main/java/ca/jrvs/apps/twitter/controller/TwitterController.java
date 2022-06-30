@@ -6,8 +6,10 @@ import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.service.Service;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+@org.springframework.stereotype.Controller
 public class TwitterController implements Controller {
 
   private static final String COORD_SEP = ":";
@@ -15,6 +17,7 @@ public class TwitterController implements Controller {
 
   private Service service;
 
+  @Autowired
   public TwitterController(Service service) {
     this.service = service;
   }
@@ -69,7 +72,7 @@ public class TwitterController implements Controller {
 
   @Override
   public List<Tweet> deleteTweet(String[] args) {
-    if(args.length < 2 || !args[0].equals("delete")) {
+    if (args.length < 2 || !args[0].equals("delete")) {
       throw new IllegalArgumentException("USAGE: TwitterCLIApp delete [one id or more ids]");
     }
 

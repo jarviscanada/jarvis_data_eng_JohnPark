@@ -4,6 +4,7 @@ import ca.jrvs.apps.twitter.TwitterCLIApp;
 import ca.jrvs.apps.twitter.controller.Controller;
 import ca.jrvs.apps.twitter.controller.TwitterController;
 import ca.jrvs.apps.twitter.dao.CrdDao;
+import ca.jrvs.apps.twitter.dao.TwitterDao;
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
 import ca.jrvs.apps.twitter.service.Service;
@@ -35,6 +36,11 @@ public class TwitterCLIBean {
   @Bean
   public Service service(CrdDao dao) {
     return new TwitterService(dao);
+  }
+
+  @Bean
+  public CrdDao crdDao(HttpHelper httpHelper) {
+    return new TwitterDao(httpHelper);
   }
 
   @Bean
