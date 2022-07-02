@@ -3,6 +3,12 @@ package ca.jrvs.practice.codingChallenge;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Big-O: push - O(1), pop - O(n), top - O(1), empty - O(1)
+ * Justification: For pop(), we move every element in queue1 to queue2 except the last element.
+ * Then, we return the last element and put back all the elements of queue2 to queue1. This cost
+ * 2n iteration. Thus, O(n). Everything else is constant time execution - one line.
+ */
 public class StackUsingTwoQueue {
   private final Queue<Integer> queue1;
   private final Queue<Integer> queue2;
