@@ -12,3 +12,11 @@ target/
 .*.swo
 */.DS_Store
 .DS_Store
+
+out/
+log/
+
+
+*.settings/
+*.project
+*.classpath
