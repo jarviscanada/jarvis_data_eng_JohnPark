@@ -1,5 +1,6 @@
 package ca.jrvs.practice.dataStructure.tree;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -15,6 +16,8 @@ public class JBSTree<E> implements JTree<E> {
    * Comparator cannot be null
    */
   private Comparator<E> comparator;
+
+  private Node<E> head = null;
 
   /**
    * Create a new BST
@@ -36,7 +39,10 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public E insert(E object) {
-    return null;
+    if (this.head == null)
+      this.head = new Node<>(object, null);
+    this.head.insert(object, comparator);
+    return object;
   }
 
   /**
@@ -47,7 +53,11 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public E search(E object) {
-    return null;
+    Node<E> searchedNode = head.search(object, comparator);
+    if (searchedNode == null)
+      return null;
+    else
+      return searchedNode.getValue();
   }
 
   /**
@@ -59,7 +69,89 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public E remove(E object) {
-    return null;
+    Node<E> current = this.head;
+    Node<E> parent = this.head;
+    boolean isleftChild = false;
+
+    if (current == null)
+      throw new IllegalArgumentException("the object not exists");
+
+    // Gets the proper node
+    while (current != null && !current.getValue().equals(object)) {
+      parent = current;
+
+      if (comparator.compare(current.getValue(), object) < 0) {
+        current = current.getLeft();
+        isleftChild = true;
+      } else {
+        current = current.getRight();
+        isleftChild = false;
+      }
+    }
+
+    if (current == null)
+      throw new IllegalArgumentException("the object not exists");
+
+    if (current.getLeft() == null && current.getRight() == null) {
+      if (current == head) {
+        head = null;
+        return current.getValue();
+      } else {
+        if (isleftChild)
+          parent.setLeft(null);
+        else
+          parent.setRight(null);
+      }
+    }
+    else if (current.getRight() == null) {
+      if (current == head) {
+        head = head.getLeft();
+        head.setParent(null);
+      } else if (isleftChild) { // current is left child of the parent
+        parent.setLeft(current.getLeft());
+      } else {
+        parent.setRight(current.getLeft());
+      }
+    }
+    else if (current.getLeft() == null) {
+      if (current == head) {
+        head = head.getRight();
+        head.setParent(null);
+      } else if (isleftChild) { // current is right child of the parent
+        parent.setLeft(current.getRight());
+      } else {
+        parent.setRight(current.getRight());
+      }
+    }
+    else {
+      Node<E> successor = getSuccessor(current);
+      if (current == head)
+        head = successor;
+      else if (isleftChild)
+        parent.setLeft(successor);
+      else
+        parent.setRight(successor);
+      successor.setLeft(current.getLeft());
+    }
+    return current.getValue();
+
+  }
+
+  private Node<E> getSuccessor(Node<E> node) {
+    Node<E> parentOfSuccessor = node;
+    Node<E> successor = node;
+    Node<E> current = node.getRight();
+
+    while (current != null) {
+      parentOfSuccessor = successor;
+      successor = current;
+      current = current.getLeft();
+    }
+    if (successor != node.getRight()) {
+      parentOfSuccessor.setLeft(successor.getRight());
+      successor.setRight(node.getRight());
+    }
+    return successor;
   }
 
   /**
@@ -69,7 +161,9 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public E[] preOrder() {
-    return null;
+    ArrayList<E> arr = new ArrayList<>();
+    this.head.preOrderHelper(arr);
+    return (E[]) arr.toArray();
   }
 
   /**
@@ -79,7 +173,9 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public E[] inOrder() {
-    return null;
+    ArrayList<E> arr = new ArrayList<>();
+    this.head.inOrderHelper(arr);
+    return (E[]) arr.toArray();
   }
 
   /**
@@ -89,7 +185,9 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public E[] postOrder() {
-    return null;
+    ArrayList<E> arr = new ArrayList<>();
+    this.head.postOrderHelper(arr);
+    return (E[]) arr.toArray();
   }
 
   /**
@@ -99,6 +197,8 @@ public class JBSTree<E> implements JTree<E> {
    */
   @Override
   public int findHeight() {
+    if (head == null)
+      throw new NullPointerException("BST empty");
     return 0;
   }
 
@@ -146,6 +246,81 @@ public class JBSTree<E> implements JTree<E> {
       this.parent = parent;
     }
 
+    public void insert(E object, Comparator<E> comparator) {
+      if (comparator.compare(object, this.value) == 0) {
+        throw new IllegalArgumentException("The object already exist");
+      }
+      else if (comparator.compare(object, this.value) > 0) {
+        if (this.getRight() == null)
+          this.setRight(new Node<E>(object, this));
+        else
+          this.getRight().insert(object, comparator);
+      } else {
+        if (this.getLeft() == null)
+          this.setLeft(new Node<E>(object, this));
+        else
+          this.getLeft().insert(object,comparator);
+      }
+    }
+
+    public Node<E> search(E object, Comparator<E> comparator) {
+      if (comparator.compare(this.getValue(), object) == 0)
+        return this;
+      if (comparator.compare(this.getValue(), object) > 0 && this.left != null)
+        return this.left.search(object, comparator);
+      if (this.right != null)
+        return this.right.search(object, comparator);
+      return null;
+    }
+
+    public void inOrderHelper(ArrayList<E> container) {
+      if (this.left == null && this.right == null)
+        container.add(this.value);
+      else if (this.left == null) {
+        container.add(this.value);
+        this.getRight().inOrderHelper(container);
+      } else if (this.right == null) {
+        this.getLeft().inOrderHelper(container);
+        container.add(this.value);
+      } else {
+        this.getLeft().inOrderHelper(container);
+        container.add(this.value);
+        this.getRight().inOrderHelper(container);
+      }
+    }
+
+    public void preOrderHelper(ArrayList<E> container) {
+      if (this.left == null && this.right == null)
+        container.add(this.value);
+      else if (this.left == null) {
+        container.add(this.value);
+        this.getRight().inOrderHelper(container);
+      } else if (this.right == null) {
+        container.add(this.value);
+        this.getLeft().inOrderHelper(container);
+      } else {
+        container.add(this.value);
+        this.getLeft().inOrderHelper(container);
+        this.getRight().inOrderHelper(container);
+      }
+    }
+
+    public void postOrderHelper(ArrayList<E> container) {
+      if (this.left == null && this.right == null)
+        container.add(this.value);
+      else if (this.left == null) {
+        this.getRight().inOrderHelper(container);
+        container.add(this.value);
+      } else if (this.right == null) {
+        this.getLeft().inOrderHelper(container);
+        container.add(this.value);
+      } else {
+        this.getLeft().inOrderHelper(container);
+        this.getRight().inOrderHelper(container);
+        container.add(this.value);
+      }
+    }
+
     @Override
     public boolean equals(Object o) {
       if (this == o) {
@@ -166,5 +341,4 @@ public class JBSTree<E> implements JTree<E> {
       return Objects.hash(getValue(), getLeft(), getRight(), getParent());
     }
   }
-
 }
