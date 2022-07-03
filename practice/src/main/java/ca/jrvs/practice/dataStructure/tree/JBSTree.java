@@ -199,7 +199,7 @@ public class JBSTree<E> implements JTree<E> {
   public int findHeight() {
     if (head == null)
       throw new NullPointerException("BST empty");
-    return 0;
+    return this.head.height();
   }
 
   static final class Node<E> {
@@ -245,6 +245,7 @@ public class JBSTree<E> implements JTree<E> {
     public void setParent(Node<E> parent) {
       this.parent = parent;
     }
+
 
     public void insert(E object, Comparator<E> comparator) {
       if (comparator.compare(object, this.value) == 0) {
@@ -319,6 +320,19 @@ public class JBSTree<E> implements JTree<E> {
         this.getRight().inOrderHelper(container);
         container.add(this.value);
       }
+    }
+
+    public int height() {
+      if (this.left == null && this.right == null)
+        return 1;
+
+      int left = 0;
+      int right = 0;
+      if (this.getLeft() != null)
+        left = this.getLeft().height();
+      if (this.getRight() != null)
+        right = this.getRight().height();
+      return (left > right) ? (left + 1) : (right + 1);
     }
 
     @Override
