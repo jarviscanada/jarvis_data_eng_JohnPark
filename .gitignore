@@ -8,6 +8,7 @@ target/
 .idea/
 .eclipse
 *.xml
+!pom.xml
 .*.swp
 .*.swo
 */.DS_Store
