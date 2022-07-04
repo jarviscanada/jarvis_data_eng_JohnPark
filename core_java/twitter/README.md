@@ -40,9 +40,26 @@ docker run --rm \
 ## UML diagram
 ![UML Diagram](./assets/twitter_uml_diagram.png)
 
-## explain each component(app/main, controller, service, DAO) (30-50 words each)
+#### App/Main
+
+This component of the application interacts with a client directly. Summons the controller which is dependent on service which is dependent on on DAO objects. App/Main parses the command args received from a client and passes the parsed args to controller.
+
+#### Controller
+
+The controller layer summons the service component and interacts with it to perform its tasks. The controller layer recieves the parsed arguments and uses service layer to perform appropriate operation according to the arguments given.
+
+#### Service
+
+The service layer handles the business logic and calls DAO layer to perform it tasks. The service layer checks whether the commands inputted by a client is valid or not and uses DAO to operate appropriately.
+
+#### DAO Component
+
+DAO layer Interacts directly with Twitter REST API through HTTP requests. AO constructs appropriate URI to send HTTP requests to Twitter API. It is responsible for communication of data with Twitter server and performs create/show/delete tweets. 
 
 ## Models
+In this project, the JSON objects that are delivered from the Twitter API has been represnted through models in Java. 
+![UML Diagram](./assets/models.png)
+
 
 Talk about tweet model
 ## Spring
