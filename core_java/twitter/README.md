@@ -76,7 +76,7 @@ In this project, the JSON objects that are delivered from the Twitter API has be
    "retweeted":false
 }
 ```
-To model the JSON object, following classes have been implemented
+To model a JSON object like above, following classes have been implemented
 ![UML Diagram](./assets/models.png)
 
 
