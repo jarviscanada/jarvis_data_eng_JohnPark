@@ -57,11 +57,29 @@ The service layer handles the business logic and calls DAO layer to perform it t
 DAO layer Interacts directly with Twitter REST API through HTTP requests. AO constructs appropriate URI to send HTTP requests to Twitter API. It is responsible for communication of data with Twitter server and performs create/show/delete tweets. 
 
 ## Models
-In this project, the JSON objects that are delivered from the Twitter API has been represnted through models in Java. 
+In this project, the JSON objects that are delivered from the Twitter API has been represnted through models in Java. Here is an example of JSON tweet object:
+```
+//Simplified Tweet Object 
+{
+   "created_at":"Mon Feb 18 21:24:39 +0000 2018",
+   "id":1097607323932564480,
+   "id_str":"1097607323932564480",
+   "text":"test with loc223",
+   "entities":{
+      "hashtags":[],      
+      "user_mentions":[] 
+   },
+   "coordinates":null,    
+   "retweet_count":0,
+   "favorite_count":0,
+   "favorited":false,
+   "retweeted":false
+}
+```
+To model the JSON object, following classes have been implemented
 ![UML Diagram](./assets/models.png)
 
 
-Talk about tweet model
 ## Spring
 The dependencies in spring is managed through Inversion of Control and Dependency injection. Inversion of Control is principle in software engineering which transfers the control of objects or portions of a program to a container or framework. Dependency Injection is injecting the object that is dependent on to the depending object. Spring uses annotation-based syntax to specificy specific role of each component and marks each component as `Bean` and sets up dependency accordingly. The annotation the spring uses include `@Component`, `@Controller`, `@Service`, and `@Repository`. The `@Autowire` annotation was used before each constructor to indicate Spring that it must inject the dependencies through the constructor.
 
