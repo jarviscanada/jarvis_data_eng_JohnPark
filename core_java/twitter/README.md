@@ -47,12 +47,26 @@ docker run --rm \
 Talk about tweet model
 ## Spring
 - How you managed the dependencies using Spring?
+The dependencies in spring is managed through Inversion of Control and Dependency injection. Inversion of Control is principle in software engineering which transfers the control of objects or portions of a program to a container or framework. Dependency Injection is injecting the object that is dependent on to the depending object. Spring uses annotation-based syntax to specificy specific role of each component and marks each component as `Bean` and sets up dependency accordingly. The annotation the spring uses include `@Component`, `@Controller`, `@Service`, and `@Repository`. The `@Autowire` annotation was used before each constructor to indicate Spring that it must inject the dependencies through the constructor.
+
+The application include three different approaches in using Spring. 
+- The first approach is written in `TwitterCLIBean` class which is manual construction of each individual beans and setting up dependencies manually. 
+- The second approach is written in `TwitterCLIComponentScan` where i set up the component annotation - `@Component`, `@Controller`, `@Service`, and `@Repository` and the spring will automatically set up the dependencies according to a built-in template from spring framework
+- The third approach is written in `TwitterCLISpringBoot`. It uses SpringBoot to manage dependencies. Simply writing `@SpringBootApplication` at the main/app component will configure the dependencies automatically. The only required is the source code where the beans are located - `@SpringBootApplication(scanBasePackages = "ca.jrvs.apps.twitter")` in this case.
+
+Note that, the deployed version uses the last approach to run the application. 
 
 # Test
 How did you test you app using Junit and mockito?
+The frameworks used to test this application are Junit4 and Mockito. For each classes, Integration tests and unit tests were written to test functionality of multiple classes as a group and each class' individual methods
+
+The integration testing was written for each classes and it involved testing its functionality when interacting with other dependent classes and the twitter API itself. It made sure that there was no issues when performing cross-classes methods
+
+The Unit testing testing the functionality of each methods. It involved use of mockito to mock other components to rule out its behaviour dependent on other classes. Mockito allowed testing each component in isolated environment
+
 
 # Deployment
-How did you dockerize your app.
+The application was dockerized by deriving 
 
 # Improvements
 - Improved frontend, which is the at the user-interface level could have been implemented. Convenient way to input environment variable, and show indication of invalid input would be much helpful to the users 
