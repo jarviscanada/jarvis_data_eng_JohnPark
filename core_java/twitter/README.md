@@ -74,7 +74,6 @@ The application include three different approaches in using Spring.
 Note that, the deployed version uses the last approach to run the application. 
 
 # Test
-How did you test you app using Junit and mockito?
 The frameworks used to test this application are Junit4 and Mockito. For each classes, Integration tests and unit tests were written to test functionality of multiple classes as a group and each class' individual methods
 
 The integration testing was written for each classes and it involved testing its functionality when interacting with other dependent classes and the twitter API itself. It made sure that there was no issues when performing cross-classes methods
