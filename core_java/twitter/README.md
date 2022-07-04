@@ -81,7 +81,19 @@ The Unit testing testing the functionality of each methods. It involved use of m
 
 
 # Deployment
-The application was dockerized by deriving 
+The application was dockerized after deriving uber jar using maven. Docker containerized the uber jar and I pushed the image to the Docker Hub repository. The docker ontainerization involved generating a DOCKERFILE and using `openjdk:8-alphine` as the base container where my application will be installed an run (note that `openjdk:8-alpine` is the bare minimum to run any Java 8 application.
+
+The steps involved to dockerization and deployments are as follows:
+```
+# Build the uber jar
+mvn clean package
+
+# Create the image
+docker built -t <username>/twitter .
+
+# Push the image to the docker hub - deployment
+docker push <username>/twitter
+```
 
 # Improvements
 - Improved frontend, which is the at the user-interface level could have been implemented. Convenient way to input environment variable, and show indication of invalid input would be much helpful to the users 
