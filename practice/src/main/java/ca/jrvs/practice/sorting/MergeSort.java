@@ -22,10 +22,23 @@ public class MergeSort {
     merge(a, l, r, mid, n - mid);
   }
 
+  // left and right become the size of l and r respectively
   public static void merge(int[] a, int[] l, int[] r, int left, int right) {
+    // l and r are a divided into half.
     int i = 0, j = 0, k = 0;
     while (i < left && j < right) {
-      if (l)
+      if (l[i] <= r[j]) {
+        a[k++] = l[i++];
+      } else {
+        a[k++] = r[j++];
+      }
     }
+    while (i < left) {
+      a[k++] = l[i++];
+    }
+    while (j < right) {
+      a[k++] = r[j++];
+    }
+    // Note that we are adding to the original until i and j reaches the size of the l and r respectively
   }
 }
