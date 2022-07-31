@@ -17,6 +17,12 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_JohnPark/]
 
 **Cluster Monitor** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_JohnPark//tree/master/linux_sql)]: Monitoring software for Jarvis Cluster Administration Team which automatically retrieves hardware specifications and resource usage from each machine and node of a Linux cluster. This program also initiates the database automatically and all the information retrieved from each node is stored there. The database is established using docker and PostgresSQL and the program is implemented using bash scripts. Furthermore, because the resource usages are dynamic over time from each machine or node, crontab was utilized to continually update the corresponding information on the database.
 
+**Core Java Apps** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_JohnPark//tree/master/core_java)]:
+      
+  - Twitter App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam.
+  - JDBC App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam.
+  - Grep App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam.
+
 
 ## Highlighted Projects
 **Sentimental-Analysis-Of-Stocks (Swift)** [[GitHub](https://github.com/JohnPHK/Sentimental-Analysis-Of-Stocks.git)]: Built an iOS application containing a trained NLP model that predicts whether the stock market will increase or decrease based on twitter input. The NLP model is composed of Convolutional Neural Network and trained through extensive data from Twitter and news. The NLP model was able to run with the mobile application through TensorFlow Lite. Once the input is fed, the application will output an indication of whether the stock market is in an upwards trend or downwards trend with a confidence interval value.
@@ -38,11 +44,7 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_JohnPark/]
 
 
 ## Education
-**University of Toronto St. George (2012-2017)**, Honours Bachelor of Science, Imunology and Cell & Molecular Biology
-- Dean's List (2013, 2014, 2016, 2017)
-- GPA 3.73/4.00
-
-**University of Toronto St. George (2017-2021)**, Honours Bachelor of Science (Second Degree), Computer Science Specialist
+**University of Toronto St. George (2017-2021)**, Honours Bachelor of Science, Computer Science Specialist
 - GPA: 3.28/4.00
 
 
