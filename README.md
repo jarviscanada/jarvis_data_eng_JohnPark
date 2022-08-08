@@ -4,7 +4,7 @@ I have graduated from the University of Toronto St. George with a Bachelor's deg
 
 ## Skills
 
-**Proficient:** Java, Linux/Bash, RDBMS/SQL, Agile/Scrum, Git, Python, Javascript, HTML/CSS, Latex, Docker, Agile/Scrum, C/C++, ReactJS
+**Proficient:** Java, Linux/Bash, RDBMS/SQL, Git, Python, Javascript, HTML/CSS, Latex, Docker, Agile/Scrum, C/C++, ReactJS
 
 **Competent:** Machine Learning, Natural Language Processing, Pytorch, MATLAB, MongoDB, ExpressJs, NodeJs, Regex
 
