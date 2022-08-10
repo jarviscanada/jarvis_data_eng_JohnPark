@@ -46,8 +46,6 @@ public class MarketDataDao implements CrudRepository<IexQuote, String> {
     IEX_BATCH_URL = marketDataConfig.getHost() + IEX_BATCH_PATCH + marketDataConfig.getToken();
   }
 
-
-
   /**
    * Get an IexQuote (helper method which class findAllById)
    * @param ticker
@@ -106,7 +104,7 @@ public class MarketDataDao implements CrudRepository<IexQuote, String> {
         String quoteStr = IexQuotesJson.getJSONObject(ticker).get("quote").toString();
         return mapper.readValue(quoteStr, IexQuote.class);
       } catch (JSONException | IOException e) {
-        throw new DataRetrievalFailureException("Invalid ticker", e);
+        throw new DataRetrievalFailureException("Failed to retrieve data", e);
       }
     }).collect(Collectors.toList());
   }
