@@ -44,6 +44,7 @@ public class QuoteDaoIntTest {
 
   @After
   public void deleteOne() {
-    quoteDao.deleteById(savedQuote.getId());
+    quoteDao.
+        deleteById(savedQuote.getId());
   }
 }

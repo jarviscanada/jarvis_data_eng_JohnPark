@@ -40,9 +40,9 @@ public class QuoteService {
    */
   public void updateMarketData() {
     findAllQuotes().stream()
-        .map(quote -> marketDataDao.findById(quote.getTicker()).orElseThrow(() -> {
-          throw new NoSuchElementException("ticker not found : " + quote.getTicker());
-        })).map(QuoteService::buildQuoteFromIexQuote).forEach(quoteDao::save);
+        .map(quote -> marketDataDao.findById(quote.getTicker())
+            .orElseThrow(() -> new NoSuchElementException("ticker not found : " + quote.getTicker())
+      )).map(QuoteService::buildQuoteFromIexQuote).forEach(quoteDao::save);
   }
 
 
