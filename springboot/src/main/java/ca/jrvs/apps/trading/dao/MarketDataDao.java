@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,6 +66,7 @@ public class MarketDataDao implements CrudRepository<IexQuote, String> {
    * Get quotes from IEX
    * @param tickers is a list of tickers
    * @return a list of IexQuote object
+   * @throws NoSuchElementException if ticker is not found from IEX
    * @throws IllegalArgumentException if any ticker is invalid or tickers is empty
    * @throws  DataRetrievalFailureException if HTTP request failed
    */
@@ -93,7 +95,7 @@ public class MarketDataDao implements CrudRepository<IexQuote, String> {
     return tickersKey.map(ticker -> {
       try {
         if (!IexQuotesJson.has(ticker)) {
-          throw new IllegalArgumentException("Invalid ticker");
+          throw new NoSuchElementException("ticker not found : " + ticker);
         }
         String quoteStr = IexQuotesJson.getJSONObject(ticker).get("quote").toString();
         return mapper.readValue(quoteStr, IexQuote.class);

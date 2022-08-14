@@ -5,11 +5,12 @@ import ca.jrvs.apps.trading.dao.QuoteDao;
 import ca.jrvs.apps.trading.model.domain.IexQuote;
 import ca.jrvs.apps.trading.model.domain.Quote;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Transactional
@@ -29,22 +30,21 @@ public class QuoteService {
   /**
    * Update quote table against IEX source
    * - get all quotes from the db
-   * - foreach ticker get iexQuote
+   * - for each ticker get iexQuote
    * - convert iexQuote to quote entity
    * - persist quote to db
    *
-   * @throws org.springframework.dao.EmptyResultDataAccessException if ticker is not found from IEX
+   * @throws NoSuchElementException                      if ticker is not found from IEX
    * @throws org.springframework.dao.DataAccessException if unable to retrieve data
-   * @throws IllegalArgumentException for invalid input
+   * @throws IllegalArgumentException                    for invalid input
    */
   public void updateMarketData() {
-    //Get all quotes from the db
-    List<Quote> allQuotesFromDB = findAllQuotes();
-
-    //For each do this
-
-
+    findAllQuotes().stream()
+        .map(quote -> marketDataDao.findById(quote.getTicker()).orElseThrow(() -> {
+          throw new NoSuchElementException("ticker not found : " + quote.getTicker());
+        })).map(QuoteService::buildQuoteFromIexQuote).forEach(quoteDao::save);
   }
+
 
   /**
    * Helper method. Map IexQuote to a Quote entity.
@@ -75,14 +75,18 @@ public class QuoteService {
    * @throws IllegalArgumentException if ticker is not found from IEX
    */
   public List<Quote> saveQuotes(List<String> tickers) {
-
+    return tickers.stream()
+        .map(this::saveQuote)
+        .map(quote -> quoteDao.save(quote)).collect(Collectors.toList());
   }
 
   /**
    * Helper method
    */
   public Quote saveQuote(String ticker) {
-
+    IexQuote iexQuote = marketDataDao.findById(ticker)
+        .orElseThrow(() -> new IllegalArgumentException("ticker not found : " + ticker));
+    return buildQuoteFromIexQuote(iexQuote);
   }
 
   /**
@@ -99,6 +103,7 @@ public class QuoteService {
 
   /**
    * Update a given quote to quote table without validation
+   *
    * @param quote entity
    */
   public Quote saveQuote(Quote quote) {
@@ -107,6 +112,7 @@ public class QuoteService {
 
   /**
    * Find all quotes from the quote table
+   *
    * @return a list of quotes
    */
   public List<Quote> findAllQuotes() {
