@@ -43,42 +43,6 @@ public class QuoteDao implements CrudRepository<Quote, String> {
     simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName(TABLE_NAME);
   }
 
-//  public static void main(String[] args) {
-//    System.out.println("Creating apacheDataSource");
-//    String url = System.getenv("PSQL_URL");
-//    System.out.println(url);
-//    String user = System.getenv("PSQL_USER");
-//    System.out.println(user);
-//    String password = System.getenv("PSQL_PASSWORD");
-//    System.out.println(password);
-//    BasicDataSource basicDataSource = new BasicDataSource();
-//    basicDataSource.setUrl(url);
-//    basicDataSource.setUsername(user);
-//    basicDataSource.setPassword(password);
-//    QuoteDao quoteDao = new QuoteDao(basicDataSource);
-//
-//    Quote testQuote = new Quote();
-//    testQuote.setId("TEST");
-//    testQuote.setTicker("TEST");
-//    testQuote.setLastPrice(500.0);
-//    testQuote.setBidPrice(0.0);
-//    testQuote.setAskPrice(0.0);
-//    testQuote.setBidSize(0L);
-//    testQuote.setAskSize(0L);
-//
-//    quoteDao.addOne(testQuote);
-//
-//    quoteDao.deleteById("TEST");
-//
-//    Quote res = quoteDao.findById("AMZN").get();
-//    System.out.println(res.getId());
-//    System.out.println(res.getTicker());
-//    System.out.println(res.getLastPrice());
-//
-//    quoteDao.deleteAll();
-//
-//  }
-
   /**
    * hint: http://bit.ly/2sDz8hq DataAccessException family
    *
@@ -214,7 +178,7 @@ public class QuoteDao implements CrudRepository<Quote, String> {
 
     Long res = jdbcTemplate.queryForObject(countSql, Long.class);
     if (res == null) {
-      return 0;
+      throw new IllegalStateException("Unable to extract required info from db");
     }
     return res;
   }
