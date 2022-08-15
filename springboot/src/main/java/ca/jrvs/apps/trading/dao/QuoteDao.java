@@ -43,41 +43,41 @@ public class QuoteDao implements CrudRepository<Quote, String> {
     simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName(TABLE_NAME);
   }
 
-  public static void main(String[] args) {
-    System.out.println("Creating apacheDataSource");
-    String url = System.getenv("PSQL_URL");
-    System.out.println(url);
-    String user = System.getenv("PSQL_USER");
-    System.out.println(user);
-    String password = System.getenv("PSQL_PASSWORD");
-    System.out.println(password);
-    BasicDataSource basicDataSource = new BasicDataSource();
-    basicDataSource.setUrl(url);
-    basicDataSource.setUsername(user);
-    basicDataSource.setPassword(password);
-    QuoteDao quoteDao = new QuoteDao(basicDataSource);
-
-    Quote testQuote = new Quote();
-    testQuote.setId("TEST");
-    testQuote.setTicker("TEST");
-    testQuote.setLastPrice(500.0);
-    testQuote.setBidPrice(0.0);
-    testQuote.setAskPrice(0.0);
-    testQuote.setBidSize(0L);
-    testQuote.setAskSize(0L);
-
-    quoteDao.addOne(testQuote);
-
-    quoteDao.deleteById("TEST");
-
-    Quote res = quoteDao.findById("AMZN").get();
-    System.out.println(res.getId());
-    System.out.println(res.getTicker());
-    System.out.println(res.getLastPrice());
-
-    quoteDao.deleteAll();
-
-  }
+//  public static void main(String[] args) {
+//    System.out.println("Creating apacheDataSource");
+//    String url = System.getenv("PSQL_URL");
+//    System.out.println(url);
+//    String user = System.getenv("PSQL_USER");
+//    System.out.println(user);
+//    String password = System.getenv("PSQL_PASSWORD");
+//    System.out.println(password);
+//    BasicDataSource basicDataSource = new BasicDataSource();
+//    basicDataSource.setUrl(url);
+//    basicDataSource.setUsername(user);
+//    basicDataSource.setPassword(password);
+//    QuoteDao quoteDao = new QuoteDao(basicDataSource);
+//
+//    Quote testQuote = new Quote();
+//    testQuote.setId("TEST");
+//    testQuote.setTicker("TEST");
+//    testQuote.setLastPrice(500.0);
+//    testQuote.setBidPrice(0.0);
+//    testQuote.setAskPrice(0.0);
+//    testQuote.setBidSize(0L);
+//    testQuote.setAskSize(0L);
+//
+//    quoteDao.addOne(testQuote);
+//
+//    quoteDao.deleteById("TEST");
+//
+//    Quote res = quoteDao.findById("AMZN").get();
+//    System.out.println(res.getId());
+//    System.out.println(res.getTicker());
+//    System.out.println(res.getLastPrice());
+//
+//    quoteDao.deleteAll();
+//
+//  }
 
   /**
    * hint: http://bit.ly/2sDz8hq DataAccessException family
@@ -128,21 +128,42 @@ public class QuoteDao implements CrudRepository<Quote, String> {
         quote.getAskPrice(), quote.getAskSize(), quote.getTicker()};
   }
 
+  /**
+   * helper method that makes sql add values objects
+   *
+   * @param quote to be added
+   * @return ADD_SQL values
+   */
+  private Object[] makeAddValues(Quote quote) {
+    return new Object[]{quote.getTicker(), quote.getLastPrice(), quote.getBidPrice(),
+        quote.getBidSize(), quote.getAskPrice(), quote.getAskSize()};
+  }
+
   @Override
   public <S extends Quote> List<S> saveAll(Iterable<S> quotes) {
     String updateSql = "UPDATE " + TABLE_NAME
         + " SET last_price=?, bid_price=?, bid_size=?, ask_price=?, ask_size=? WHERE "
         + ID_COLUMN_NAME + " =?";
-    List<Object[]> batch = new ArrayList<>();
+    String insertSql = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?)";
+
+    List<Object[]> batchUpdate = new ArrayList<>();
+    List<Object[]> batchAdd = new ArrayList<>();
+
     quotes.forEach(quote -> {
-      if (!existsById(quote.getTicker())) {
-        throw new IllegalArgumentException("Ticker not found:" + quote.getTicker());
+      if (quote.getTicker() == null) {
+        throw new IllegalArgumentException("null quote available");
       }
-      batch.add(new Object[]{quote.getLastPrice(), quote.getBidPrice(), quote.getBidSize(),
-          quote.getAskPrice(), quote.getAskSize(), quote.getTicker()});
+      if (!existsById(quote.getTicker())) {
+        batchAdd.add(makeAddValues(quote));
+      } else {
+        batchUpdate.add(makeUpdateValues(quote));
+      }
     });
-    int[] rows = jdbcTemplate.batchUpdate(updateSql, batch);
-    int totalRow = Arrays.stream(rows).sum();
+
+
+    int[] updateRows = jdbcTemplate.batchUpdate(updateSql, batchUpdate);
+    int[] insertRows = jdbcTemplate.batchUpdate(insertSql, batchAdd);
+    int totalRow = Arrays.stream(updateRows).sum() + Arrays.stream(insertRows).sum();
     if (totalRow != Iterables.size(quotes)) {
       throw new IncorrectResultSizeDataAccessException("Number of rows ", Iterables.size(quotes),
           totalRow);
@@ -179,8 +200,7 @@ public class QuoteDao implements CrudRepository<Quote, String> {
   @Override
   public List<Quote> findAll() {
     String selectAllSql = "SELECT * FROM " + TABLE_NAME;
-
-    return jdbcTemplate.queryForList(selectAllSql, Quote.class);
+    return jdbcTemplate.query(selectAllSql, new BeanPropertyRowMapper<>(Quote.class));
   }
 
   @Override
@@ -190,7 +210,7 @@ public class QuoteDao implements CrudRepository<Quote, String> {
 
   @Override
   public long count() {
-    String countSql = "COUNT(*) FROM " + TABLE_NAME;
+    String countSql = "SELECT COUNT(*) FROM " + TABLE_NAME;
 
     Long res = jdbcTemplate.queryForObject(countSql, Long.class);
     if (res == null) {
