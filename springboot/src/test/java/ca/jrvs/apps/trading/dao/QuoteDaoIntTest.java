@@ -27,8 +27,6 @@ public class QuoteDaoIntTest {
   @Autowired
   private QuoteDao quoteDao;
 
-
-
   private final Quote savedQuote1 = new Quote();
   private final Quote savedQuote2 = new Quote();
   private final Quote savedQuote3 = new Quote();
@@ -61,6 +59,15 @@ public class QuoteDaoIntTest {
   }
 
   @Test
+  public void existsById() {
+    assertTrue(quoteDao.existsById("ONEE"));
+    assertTrue(quoteDao.existsById("TWOO"));
+    assertTrue(quoteDao.existsById("THRE"));
+    assertFalse(quoteDao.existsById("NENE"));
+
+  }
+
+  @Test
   public void searchId() {
     Optional<Quote> optionalQuote1 = quoteDao.findById("ONEE");
     if (!optionalQuote1.isPresent()) {
@@ -81,10 +88,6 @@ public class QuoteDaoIntTest {
 
     assertFalse(quoteDao.findById("NENE").isPresent());
 
-    assertTrue(quoteDao.existsById("ONEE"));
-    assertTrue(quoteDao.existsById("TWOO"));
-    assertTrue(quoteDao.existsById("THRE"));
-    assertFalse(quoteDao.existsById("NENE"));
 
   }
 
@@ -209,27 +212,21 @@ public class QuoteDaoIntTest {
         assertEquals((Long) 10L, quote.getBidSize());
         assertEquals("ONEE", quote.getTicker());
         assertEquals((Double) 10.1d, quote.getLastPrice());
-      }
-
-      else if (Objects.equals(quote.getTicker(), "TWOO")) {
+      } else if (Objects.equals(quote.getTicker(), "TWOO")) {
         assertEquals((Double) 11d, quote.getAskPrice());
         assertEquals((Long) 11L, quote.getAskSize());
         assertEquals((Double) 11.2d, quote.getBidPrice());
         assertEquals((Long) 11L, quote.getBidSize());
         assertEquals("TWOO", quote.getTicker());
         assertEquals((Double) 10.1d, quote.getLastPrice());
-      }
-
-      else if (Objects.equals(quote.getTicker(), "THRE")) {
+      } else if (Objects.equals(quote.getTicker(), "THRE")) {
         assertEquals((Double) 12d, quote.getAskPrice());
         assertEquals((Long) 12L, quote.getAskSize());
         assertEquals((Double) 12.2d, quote.getBidPrice());
         assertEquals((Long) 12L, quote.getBidSize());
         assertEquals("THRE", quote.getTicker());
         assertEquals((Double) 12.1d, quote.getLastPrice());
-      }
-
-      else {
+      } else {
         fail();
       }
     }

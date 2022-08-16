@@ -11,10 +11,6 @@ public class Trader implements Entity<Integer>{
   private String email;
 
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
   public String getFirstName() {
     return firstName;
   }
@@ -58,11 +54,12 @@ public class Trader implements Entity<Integer>{
 
   @Override
   public Integer getId() {
-    return null;
+    return id;
   }
 
   @Override
-  public void setId(Integer integer) {
+  public void setId(Integer id) {
+    this.id = id;
 
   }
 }
