@@ -3,7 +3,7 @@ package ca.jrvs.apps.trading.model.domain;
 
 public class Account implements Entity<Integer> {
   private Integer id;
-  private Integer trader_id;
+  private Integer traderId;
   private double amount;
 
 
@@ -17,12 +17,12 @@ public class Account implements Entity<Integer> {
     this.id = id;
   }
 
-  public Integer getTrader_id() {
-    return trader_id;
+  public Integer getTraderId() {
+    return traderId;
   }
 
-  public void setTrader_id(Integer trader_id) {
-    this.trader_id = trader_id;
+  public void setTraderId(Integer traderId) {
+    this.traderId = traderId;
   }
 
   public double getAmount() {

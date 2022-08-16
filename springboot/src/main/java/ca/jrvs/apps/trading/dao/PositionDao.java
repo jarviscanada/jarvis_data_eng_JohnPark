@@ -1,6 +1,6 @@
 package ca.jrvs.apps.trading.dao;
 
-import ca.jrvs.apps.trading.model.domain.Trader;
+import ca.jrvs.apps.trading.model.domain.Position;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,60 +8,72 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-public class TraderDao extends JdbcCrudDao<Trader> {
+public class PositionDao extends JdbcCrudDao<Position> {
+  private static final Logger logger = LoggerFactory.getLogger(PositionDao.class);
 
-  private static final Logger logger = LoggerFactory.getLogger(TraderDao.class);
-
-  private final String TABLE_NAME = "trader";
-  private final String ID_COLUMN = "id";
+  private final String TABLE_NAME = "position";
+  private final String ID_COLUMN = "account_id";
 
   private final JdbcTemplate jdbcTemplate;
   private final SimpleJdbcInsert simpleInsert;
 
   @Autowired
-  public TraderDao(DataSource dataSource) {
+  public PositionDao(DataSource dataSource) {
     this.jdbcTemplate = new JdbcTemplate(dataSource);
     this.simpleInsert = new SimpleJdbcInsert(dataSource).withTableName(TABLE_NAME)
         .usingGeneratedKeyColumns(ID_COLUMN);
   }
 
-  @Override
+
   public JdbcTemplate getJdbcTemplate() {
     return jdbcTemplate;
   }
 
-  @Override
   public SimpleJdbcInsert getSimpleJdbcInsert() {
     return simpleInsert;
   }
 
-  @Override
   public String getTableName() {
     return TABLE_NAME;
   }
 
-  @Override
   public String getIdColumnName() {
     return ID_COLUMN;
   }
 
-  @Override
-  Class<Trader> getEntityClass() {
-    return Trader.class;
+  Class<Position> getEntityClass() {
+    return Position.class;
   }
 
+
   @Override
-  public int updateOne(Trader entity) {
+  public <S extends Position> S save(S position) {
     throw new UnsupportedOperationException("Not implemented");
   }
 
   @Override
-  public <S extends Trader> Iterable<S> saveAll(Iterable<S> entities) {
+  public int updateOne(Position entity) {
     throw new UnsupportedOperationException("Not implemented");
   }
 
   @Override
-  public void delete(Trader entity) {
+  public void deleteById(Integer id) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
+  public void deleteAll() {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+
+  @Override
+  public <S extends Position> Iterable<S> saveAll(Iterable<S> iterable) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
+  public void delete(Position position) {
     throw new UnsupportedOperationException("Not implemented");
   }
 }

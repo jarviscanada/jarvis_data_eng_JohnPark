@@ -35,7 +35,7 @@ public class MarketDataDao implements CrudRepository<IexQuote, String> {
   private final String IEX_BATCH_URL;
 
   private Logger logger = LoggerFactory.getLogger(MarketDataDao.class);
-  private HttpClientConnectionManager httpClientConnectionManager;
+  private final HttpClientConnectionManager httpClientConnectionManager;
 
   public MarketDataDao(HttpClientConnectionManager httpClientConnectionManager,
       MarketDataConfig marketDataConfig) {

@@ -10,7 +10,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -96,7 +95,7 @@ public abstract class JdbcCrudDao<T extends Entity<Integer>> implements CrudRepo
   }
 
   @Override
-  public List<T> findAllById(Iterable<Integer> ids) {
+  public Iterable<T> findAllById(Iterable<Integer> ids) {
     throw new UnsupportedOperationException("Not implemented");
   }
 

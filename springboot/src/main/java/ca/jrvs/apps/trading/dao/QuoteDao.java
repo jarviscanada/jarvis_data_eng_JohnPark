@@ -34,8 +34,8 @@ public class QuoteDao implements CrudRepository<Quote, String> {
   private static final String ID_COLUMN_NAME = "ticker";
 
   private static final Logger logger = LoggerFactory.getLogger(QuoteDao.class);
-  private JdbcTemplate jdbcTemplate;
-  private SimpleJdbcInsert simpleJdbcInsert;
+  private final JdbcTemplate jdbcTemplate;
+  private final SimpleJdbcInsert simpleJdbcInsert;
 
   @Autowired
   public QuoteDao(DataSource dataSource) {
