@@ -1,10 +1,13 @@
 package ca.jrvs.apps.trading.dao;
 
 import ca.jrvs.apps.trading.model.domain.Account;
+import java.util.Optional;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -62,6 +65,31 @@ public class AccountDao extends JdbcCrudDao<Account> {
 
   private Object[] makeUpdateValues(Account account) {
     return new Object[]{account.getTraderId(), account.getAmount(), account.getId()};
+  }
+
+  public void deleteByTraderId(Integer traderId) {
+    if (!(existsByTraderId(traderId))){
+      throw new IllegalArgumentException("The trader_id not available");
+    }
+    String deleteSql = "DELETE FROM " + getTableName() + " WHERE trader_id=?";
+    getJdbcTemplate().update(deleteSql, traderId);
+  }
+
+  public Optional<Account> findTraderById(Integer traderId) {
+    Optional<Account> account = Optional.empty();
+    String selectSql = "SELECT * FROM " + getTableName() + " WHERE trader_id=?";
+    try {
+      account = Optional.ofNullable(getJdbcTemplate().queryForObject(selectSql,
+          BeanPropertyRowMapper.newInstance(getEntityClass()), traderId));
+    } catch (IncorrectResultSizeDataAccessException e) {
+      logger.debug("Can't find trader_id: " + traderId, e);
+    }
+
+    return account;
+  }
+
+  public boolean existsByTraderId(Integer traderId) {
+    return findTraderById(traderId).isPresent();
   }
 
   @Override

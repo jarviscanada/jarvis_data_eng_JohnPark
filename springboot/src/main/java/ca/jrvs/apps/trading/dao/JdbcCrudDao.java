@@ -56,7 +56,6 @@ public abstract class JdbcCrudDao<T extends Entity<Integer>> implements CrudRepo
       logger.debug("Can't find trader id: " + id, e);
     }
 
-
     return entity;
   }
 
