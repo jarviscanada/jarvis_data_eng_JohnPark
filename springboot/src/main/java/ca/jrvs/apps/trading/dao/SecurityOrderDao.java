@@ -61,6 +61,7 @@ public class SecurityOrderDao extends JdbcCrudDao<SecurityOrder> {
   }
 
 
+
   @Override
   public int updateOne(SecurityOrder securityOrder) {
     String updateSql = "UPDATE " + getTableName()
@@ -68,6 +69,7 @@ public class SecurityOrderDao extends JdbcCrudDao<SecurityOrder> {
         + getIdColumnName() + " =?";
     return jdbcTemplate.update(updateSql, makeUpdateValues(securityOrder));
   }
+
 
   private Object[] makeUpdateValues(SecurityOrder securityOrder) {
     return new Object[]{securityOrder.getAccountId(), securityOrder.getStatus(),
@@ -111,8 +113,11 @@ public class SecurityOrderDao extends JdbcCrudDao<SecurityOrder> {
 
     return StreamSupport.stream(securityOrders.spliterator(), false)
         .collect(Collectors.toList());
+  }
 
-
+  public void deleteAllByAccountId(Integer accountId) {
+    String deleteSql = "DELETE FROM " + getTableName() + " WHERE account_id =?";
+    getJdbcTemplate().update(deleteSql, accountId);
   }
 
   @Override

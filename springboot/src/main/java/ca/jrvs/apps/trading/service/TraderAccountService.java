@@ -5,18 +5,25 @@ import ca.jrvs.apps.trading.dao.PositionDao;
 import ca.jrvs.apps.trading.dao.SecurityOrderDao;
 import ca.jrvs.apps.trading.dao.TraderDao;
 import ca.jrvs.apps.trading.model.domain.Account;
+import ca.jrvs.apps.trading.model.domain.Position;
+import ca.jrvs.apps.trading.model.domain.SecurityOrder;
 import ca.jrvs.apps.trading.model.domain.Trader;
 import ca.jrvs.apps.trading.model.view.TraderAccountView;
+import java.util.List;
+import java.util.Optional;
+import javax.swing.text.html.Option;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TraderAccountService {
 
-  private TraderDao traderDao;
-  private AccountDao accountDao;
-  private PositionDao positionDao;
-  private SecurityOrderDao securityOrderDao;
+  private final TraderDao traderDao;
+  private final AccountDao accountDao;
+  private final PositionDao positionDao;
+  private final SecurityOrderDao securityOrderDao;
 
   @Autowired
   public TraderAccountService(TraderDao traderDao, AccountDao accountDao, PositionDao positionDao,
@@ -26,6 +33,11 @@ public class TraderAccountService {
     this.positionDao = positionDao;
     this.securityOrderDao = securityOrderDao;
   }
+
+//  public static void main(String[] args) {
+//    BasicDataSource
+//    TraderAccountService traderAccountService = new TraderAccountService(new TraderDao())
+//  }
 
   /**
    * Create a new trader and initialize a new account with 0 amount.
@@ -56,7 +68,7 @@ public class TraderAccountService {
     return new TraderAccountView(trader, account);
   }
 
-  public Boolean validateTrader(Trader trader) {
+  private Boolean validateTrader(Trader trader) {
     return trader.getId() != null && trader.getFirstName() != null && trader.getLastName() != null
         && trader.getDob() != null && trader.getEmail() != null && trader.getCountry() != null;
   }
@@ -71,10 +83,31 @@ public class TraderAccountService {
    *
    * @param traderId must not be null
    * @throws IllegalArgumentException if tradeId is null or not found or unable to delete
+   * @throws DataRetrievalFailureException Any failure to retrieve any entity
    */
   public void deleteTraderById(Integer traderId) {
     validateId(traderId);
 
+    Optional<Account> optionalAccount = accountDao.findByTraderId(traderId);
+    if (!optionalAccount.isPresent()) {
+      throw new DataRetrievalFailureException(
+          "Failed to retrieve the trader account from account table");
+    }
+
+    Account account = optionalAccount.get();
+    if (account.getAmount() > 0) {
+      throw new IllegalArgumentException("There is account balance left for this trader");
+    }
+
+    Integer accountId = account.getId();
+    List<Position> positions = positionDao.findByAccountId(accountId);
+    if (positions.size() > 0) {
+      throw new IllegalArgumentException("Position(s) is/are open for this trader");
+    }
+
+    securityOrderDao.deleteAllByAccountId(accountId);
+    accountDao.deleteById(accountId);
+    traderDao.deleteById(traderId);
 
   }
 
@@ -91,11 +124,8 @@ public class TraderAccountService {
    *                                  than or equal to 0
    */
   public Account deposit(Integer traderId, Double fund) {
-    validateId(traderId);
-
-    if (fund <= 0) {
-      throw new IllegalArgumentException("Invalid fund. Fund must be greater than 0");
-    }
+    Account account = validateAccForFundEx(traderId, fund);
+    return accountDao.updateAmountById(account.getId(), account.getAmount() + fund);
   }
 
   /**
@@ -112,11 +142,30 @@ public class TraderAccountService {
    *                                  fund is less or equal to 0, and insufficient fund
    */
   public Account withdraw(Integer traderId, Double fund) {
+
+    Account account = validateAccForFundEx(traderId, fund);
+
+    if (account.getAmount() - fund < 0) {
+      throw new IllegalArgumentException("Insufficient fund");
+    }
+    return accountDao.updateAmountById(account.getId(), account.getAmount() - fund);
+  }
+
+
+  private Account validateAccForFundEx(Integer traderId, Double fund) {
     validateId(traderId);
 
     if (fund <= 0) {
       throw new IllegalArgumentException("Invalid fund. Fund must be greater than 0");
     }
+
+    Optional<Account> optionalAccount = accountDao.findByTraderId(traderId);
+    if (!optionalAccount.isPresent()) {
+      throw new DataRetrievalFailureException(
+          "Failed to retrieve the trader account from the account table");
+    }
+
+    return optionalAccount.get();
   }
 
 
@@ -124,9 +173,8 @@ public class TraderAccountService {
     if (traderId == null) {
       throw new IllegalArgumentException("Invalid trader Id, traderId is null");
     }
-    if (traderDao.existsById(traderId)) {
+    if (!traderDao.existsById(traderId)) {
       throw new IllegalArgumentException("The trader ID does not exist, id: " + traderId);
     }
-
   }
 }

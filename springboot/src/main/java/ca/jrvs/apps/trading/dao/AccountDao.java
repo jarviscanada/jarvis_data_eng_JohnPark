@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -63,6 +64,23 @@ public class AccountDao extends JdbcCrudDao<Account> {
     return jdbcTemplate.update(updateSql, makeUpdateValues(account));
   }
 
+  public Account updateAmountById(Integer id, Double newAmount) {
+    String updateSql = "UPDATE " + getTableName() + " SET amount=? WHERE " + getIdColumnName()
+        + " =?";
+    jdbcTemplate.update(updateSql, newAmount, id);
+    Optional<Account> optionalUpdatedAccount = findByTraderId(id);
+    if (!optionalUpdatedAccount.isPresent()) {
+      throw new DataRetrievalFailureException("updated account is could not be retrieved");
+    }
+    Account updatedAccount =optionalUpdatedAccount.get();
+    System.out.println(updatedAccount.getAmount());
+    System.out.println(newAmount);
+    if (updatedAccount.getAmount() != newAmount) {
+      throw new IllegalStateException("amount failed to be updated");
+    }
+    return updatedAccount;
+  }
+
   private Object[] makeUpdateValues(Account account) {
     return new Object[]{account.getTraderId(), account.getAmount(), account.getId()};
   }
@@ -75,7 +93,7 @@ public class AccountDao extends JdbcCrudDao<Account> {
     getJdbcTemplate().update(deleteSql, traderId);
   }
 
-  public Optional<Account> findTraderById(Integer traderId) {
+  public Optional<Account> findByTraderId(Integer traderId) {
     Optional<Account> account = Optional.empty();
     String selectSql = "SELECT * FROM " + getTableName() + " WHERE trader_id=?";
     try {
@@ -89,7 +107,7 @@ public class AccountDao extends JdbcCrudDao<Account> {
   }
 
   public boolean existsByTraderId(Integer traderId) {
-    return findTraderById(traderId).isPresent();
+    return findByTraderId(traderId).isPresent();
   }
 
   @Override

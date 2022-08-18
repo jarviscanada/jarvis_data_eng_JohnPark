@@ -162,37 +162,73 @@ public class PositionDaoIntTest {
   }
 
   @Test
-  public void searchId() {
-    Optional<Position> optionalPosition1 = positionDao.findById(1);
-    if (!optionalPosition1.isPresent()) {
+  public void searchByAccountId() {
+    List<Position> listOfPosition1 = positionDao.findByAccountId(1);
+    if (listOfPosition1.size() != 1) {
       fail();
     }
-    Optional<Position> optionalPosition2 = positionDao.findById(2);
-    if (!optionalPosition2.isPresent()) {
+    List<Position> listOfPosition2 = positionDao.findByAccountId(2);
+    if (listOfPosition2.size() != 1) {
       fail();
     }
-    Optional<Position> optionalPosition3 = positionDao.findById(3);
-    if (!optionalPosition3.isPresent()) {
+    List<Position> listOfPosition3 = positionDao.findByAccountId(3);
+    if (listOfPosition3.size() != 1) {
       fail();
     }
 
-    assertEquals((Integer) 1, optionalPosition1.get().getAccount_id());
-    assertEquals((Integer) 2, optionalPosition2.get().getAccount_id());
-    assertEquals((Integer) 3, optionalPosition3.get().getAccount_id());
+    Position p1 = listOfPosition1.get(0);
+    Position p2 = listOfPosition2.get(0);
+    Position p3 = listOfPosition3.get(0);
 
-    assertEquals("ONEE", optionalPosition1.get().getTicker());
-    assertEquals("TWOO", optionalPosition2.get().getTicker());
-    assertEquals("THRE", optionalPosition3.get().getTicker());
+    assertEquals((Integer) 1, p1.getAccountId());
+    assertEquals((Integer) 2, p2.getAccountId());
+    assertEquals((Integer) 3, p3.getAccountId());
 
-    assertEquals((Long) 10L, optionalPosition1.get().getPosition());
-    assertEquals((Long) 10L, optionalPosition2.get().getPosition());
-    assertEquals((Long) 10L, optionalPosition3.get().getPosition());
+    assertEquals("ONEE", p1.getTicker());
+    assertEquals("TWOO", p2.getTicker());
+    assertEquals("THRE", p3.getTicker());
+
+    assertEquals((Long) 10L, p1.getPosition());
+    assertEquals((Long) 10L, p2.getPosition());
+    assertEquals((Long) 10L, p3.getPosition());
+  }
+
+  @Test
+  public void searchByTicker() {
+    List<Position> listOfPosition1 = positionDao.findByTicker("ONEE");
+    if (listOfPosition1.size() != 1) {
+      fail();
+    }
+    List<Position> listOfPosition2 = positionDao.findByTicker("TWOO");
+    if (listOfPosition2.size() != 1) {
+      fail();
+    }
+    List<Position> listOfPosition3 = positionDao.findByTicker("THRE");
+    if (listOfPosition3.size() != 1) {
+      fail();
+    }
+
+    Position p1 = listOfPosition1.get(0);
+    Position p2 = listOfPosition2.get(0);
+    Position p3 = listOfPosition3.get(0);
+
+    assertEquals((Integer) 1, p1.getAccountId());
+    assertEquals((Integer) 2, p2.getAccountId());
+    assertEquals((Integer) 3, p3.getAccountId());
+
+    assertEquals("ONEE", p1.getTicker());
+    assertEquals("TWOO", p2.getTicker());
+    assertEquals("THRE", p3.getTicker());
+
+    assertEquals((Long) 10L, p1.getPosition());
+    assertEquals((Long) 10L, p2.getPosition());
+    assertEquals((Long) 10L, p3.getPosition());
   }
 
   @Test
   public void findAll() {
-    List<SecurityOrder> securityOrders = securityOrderDao.findAll();
-    assertEquals(3, securityOrders.size());
+    List<Position> positions = positionDao.findAll();
+    assertEquals(3, positions.size());
 
   }
 

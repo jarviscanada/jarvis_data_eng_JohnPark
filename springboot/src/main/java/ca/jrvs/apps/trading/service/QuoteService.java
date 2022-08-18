@@ -6,6 +6,7 @@ import ca.jrvs.apps.trading.model.config.MarketDataConfig;
 import ca.jrvs.apps.trading.model.domain.IexQuote;
 import ca.jrvs.apps.trading.model.domain.Quote;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
 import javax.transaction.Transactional;
@@ -59,12 +60,12 @@ public class QuoteService {
   protected static Quote buildQuoteFromIexQuote(IexQuote iexQuote) {
     Quote quote = new Quote();
 
-    quote.setId(iexQuote.getSymbol());
-    quote.setLastPrice(iexQuote.getLatestPrice());
-    quote.setBidPrice(iexQuote.getIexBidPrice());
-    quote.setBidSize(iexQuote.getIexBidSize());
-    quote.setAskPrice(iexQuote.getIexAskPrice());
-    quote.setAskSize(iexQuote.getIexAskSize());
+    quote.setId(Objects.requireNonNull(iexQuote.getSymbol(), "Id cannot be null"));
+    quote.setLastPrice(Objects.requireNonNull(iexQuote.getLatestPrice(), "Last Price cannot be null"));
+    quote.setBidPrice(Objects.requireNonNull(iexQuote.getIexBidPrice(), "Bid Price cannot be null"));
+    quote.setBidSize(Objects.requireNonNull(iexQuote.getIexBidSize(), "Bid Size cannot be null"));
+    quote.setAskPrice(Objects.requireNonNull(iexQuote.getIexAskPrice(), "Ask price cannot be null"));
+    quote.setAskSize(Objects.requireNonNull(iexQuote.getIexAskSize(), "Ask Size cannnot be null"));
 
     return quote;
   }

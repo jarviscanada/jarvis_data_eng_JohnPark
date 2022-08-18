@@ -394,6 +394,78 @@ public class SecurityOrderDaoIntTest {
     securityOrderDao.save(securityOrder3);
 
 
+
+  }
+
+  @Test
+  public void deleteAllByAccountId() {
+    Trader toDeleteTrader1 = new Trader();
+    toDeleteTrader1.setFirstName("Delete");
+    toDeleteTrader1.setLastName("Trader");
+
+    Calendar calendar1 = Calendar.getInstance();
+    calendar1.set(Calendar.YEAR, 1987);
+    calendar1.set(Calendar.MONTH, 7);
+    calendar1.set(Calendar.DATE, 27);
+    toDeleteTrader1.setDob(calendar1.getTime());
+    toDeleteTrader1.setCountry("Canada");
+    toDeleteTrader1.setEmail("toDelete@abc.com");
+    traderDao.save(toDeleteTrader1);
+
+    assertTrue(traderDao.existsById(4));
+
+
+    Account toDeleteAccount1 = new Account();
+    toDeleteAccount1.setTraderId(4);
+    toDeleteAccount1.setAmount(30);
+    accountDao.save(toDeleteAccount1);
+
+    assertTrue(accountDao.existsById(4));
+
+    Quote toDeleteQuote1 = new Quote();
+    toDeleteQuote1.setAskPrice(14d);
+    toDeleteQuote1.setAskSize(14L);
+    toDeleteQuote1.setBidPrice(14.2);
+    toDeleteQuote1.setBidSize(14L);
+    toDeleteQuote1.setId("DELE");
+    toDeleteQuote1.setLastPrice(14.1d);
+    quoteDao.save(toDeleteQuote1);
+
+    assertTrue(quoteDao.existsById("DELE"));
+
+    SecurityOrder toDeleteSecurityOrder1 = new SecurityOrder();
+    toDeleteSecurityOrder1.setAccountId(4);
+    toDeleteSecurityOrder1.setStatus("FILLED");
+    toDeleteSecurityOrder1.setTicker("DELE");
+    toDeleteSecurityOrder1.setSize(10L);
+    toDeleteSecurityOrder1.setPrice(10d);
+    toDeleteSecurityOrder1.setNotes("N/A");
+    securityOrderDao.save(toDeleteSecurityOrder1);
+
+    /* New security Order to delete*/
+    SecurityOrder toDeleteSecurityOrder2 = new SecurityOrder();
+    toDeleteSecurityOrder2.setAccountId(4);
+    toDeleteSecurityOrder2.setStatus("FILLED");
+    toDeleteSecurityOrder2.setTicker("DELE");
+    toDeleteSecurityOrder2.setSize(10L);
+    toDeleteSecurityOrder2.setPrice(10d);
+    toDeleteSecurityOrder2.setNotes("N/A");
+    securityOrderDao.save(toDeleteSecurityOrder2);
+
+    Long beforeCardinality = securityOrderDao.count();
+    securityOrderDao.deleteAllByAccountId(4);
+    Long afterCadinality = securityOrderDao.count();
+    assertEquals(2, beforeCardinality - afterCadinality);
+
+    quoteDao.deleteById("DELE");
+    assertFalse(quoteDao.existsById("DELE"));
+
+    accountDao.deleteById(4);
+    assertFalse(accountDao.existsById(4));
+
+    traderDao.deleteById(4);
+    assertFalse(traderDao.existsById(4));
+
   }
 
 

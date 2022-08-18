@@ -8,6 +8,7 @@ import ca.jrvs.apps.trading.model.domain.Trader;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import javax.swing.text.html.Option;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -178,6 +179,93 @@ public class AccountDaoIntTest {
       }
     }
     assertEquals(3, allAccounts.size());
+  }
+
+  @Test
+  public void searchByTraderId() {
+    assertTrue(accountDao.existsByTraderId(1));
+    assertTrue(accountDao.existsByTraderId(2));
+    assertTrue(accountDao.existsByTraderId(3));
+
+    Optional<Account> a1 = accountDao.findByTraderId(1);
+    if (!a1.isPresent()) {
+      fail();
+    }
+    Optional<Account> a2 = accountDao.findByTraderId(2);
+    if (!a2.isPresent()) {
+      fail();
+    }
+    Optional<Account> a3 = accountDao.findByTraderId(3);
+    if (!a3.isPresent()){
+      fail();
+    }
+
+    Optional<Trader> t1 = traderDao.findById(a1.get().getTraderId());
+    if (!t1.isPresent()) {
+      fail();
+    }
+    Optional<Trader> t2 = traderDao.findById(a2.get().getTraderId());
+    if (!t2.isPresent()) {
+      fail();
+    }
+    Optional<Trader> t3 = traderDao.findById(a3.get().getTraderId());
+    if (!t3.isPresent()) {
+      fail();
+    }
+  }
+
+  @Test
+  public void updateAmountById() {
+    Account ua = accountDao.updateAmountById(account1.getId(), 3000d);
+    Optional<Account> optionalUpdatedAccount = accountDao.findById(account1.getId());
+    if (!optionalUpdatedAccount.isPresent()) {
+      fail();
+    }
+    Account updatedAccount = optionalUpdatedAccount.get();
+    assertEquals(updatedAccount.getAmount(), 3000, 0.01);
+
+    assertEquals(ua.getAmount(), updatedAccount.getAmount(), 0.01);
+    assertEquals(ua.getId(), updatedAccount.getId());
+    assertEquals(ua.getTraderId(), updatedAccount.getTraderId());
+
+    accountDao.save(account1);
+
+
+  }
+
+  @Test
+  public void deleteByTraderId() {
+    Trader toDeleteTrader = new Trader();
+    toDeleteTrader.setFirstName("Delete");
+    toDeleteTrader.setLastName("Trader");
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.YEAR, 1987);
+    calendar.set(Calendar.MONTH, 7);
+    calendar.set(Calendar.DATE, 27);
+    toDeleteTrader.setDob(calendar.getTime());
+    toDeleteTrader.setCountry("Canada");
+    toDeleteTrader.setEmail("toDelete@abc.com");
+    traderDao.save(toDeleteTrader);
+
+    assertTrue(traderDao.existsById(4));
+
+
+    Account toDeleteAccount = new Account();
+    toDeleteAccount.setTraderId(4);
+    toDeleteAccount.setAmount(30);
+
+    accountDao.save(toDeleteAccount);
+    assertTrue(accountDao.existsById(4));
+    assertTrue(accountDao.existsByTraderId(4));
+
+    accountDao.deleteByTraderId(4);
+    assertFalse(accountDao.existsByTraderId(4));
+    assertFalse(accountDao.existsByTraderId(4));
+
+
+    traderDao.deleteById(4);
+    assertFalse(traderDao.existsById(4));
   }
 
 

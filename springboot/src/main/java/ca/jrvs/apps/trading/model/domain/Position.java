@@ -1,7 +1,6 @@
 package ca.jrvs.apps.trading.model.domain;
 
-public class Position implements Entity<Integer> {
-  private Integer id;
+public class Position {
   private Integer accountId;
   private String ticker;
   private Long position;
@@ -23,21 +22,12 @@ public class Position implements Entity<Integer> {
     this.position = position;
   }
 
-  public Integer getAccount_id() {
+  public Integer getAccountId() {
     return accountId;
   }
 
-  public void setAccount_id(Integer account_id) {
+  public void setAccountId(Integer account_id) {
     this.accountId = account_id;
   }
 
-  @Override
-  public Integer getId() {
-    return id;
-  }
-
-  @Override
-  public void setId(Integer id) {
-    this.id = id;
-  }
 }
