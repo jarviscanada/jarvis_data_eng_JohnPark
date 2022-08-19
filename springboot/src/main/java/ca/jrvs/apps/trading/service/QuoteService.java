@@ -61,11 +61,36 @@ public class QuoteService {
     Quote quote = new Quote();
 
     quote.setId(Objects.requireNonNull(iexQuote.getSymbol(), "Id cannot be null"));
-    quote.setLastPrice(Objects.requireNonNull(iexQuote.getLatestPrice(), "Last Price cannot be null"));
-    quote.setBidPrice(Objects.requireNonNull(iexQuote.getIexBidPrice(), "Bid Price cannot be null"));
-    quote.setBidSize(Objects.requireNonNull(iexQuote.getIexBidSize(), "Bid Size cannot be null"));
-    quote.setAskPrice(Objects.requireNonNull(iexQuote.getIexAskPrice(), "Ask price cannot be null"));
-    quote.setAskSize(Objects.requireNonNull(iexQuote.getIexAskSize(), "Ask Size cannnot be null"));
+
+    if (iexQuote.getLatestPrice() == null) {
+      quote.setLastPrice(0.0);
+    } else {
+      quote.setLastPrice(iexQuote.getLatestPrice());
+    }
+
+    if (iexQuote.getIexBidPrice() == null) {
+      quote.setBidPrice(0.0);
+    } else {
+      quote.setBidPrice(iexQuote.getIexBidPrice());
+    }
+
+    if (iexQuote.getIexBidSize() == null) {
+      quote.setAskSize(0L);
+    } else {
+      quote.setBidSize(iexQuote.getIexBidSize());
+    }
+
+    if (iexQuote.getIexAskSize() == null) {
+      quote.setBidSize(0L);
+    } else {
+      quote.setAskSize(iexQuote.getIexAskSize());
+    }
+
+    if (iexQuote.getIexAskPrice() == null) {
+      quote.setAskPrice(0.0);
+    } else {
+      quote.setAskPrice(iexQuote.getIexAskPrice());
+    }
 
     return quote;
   }

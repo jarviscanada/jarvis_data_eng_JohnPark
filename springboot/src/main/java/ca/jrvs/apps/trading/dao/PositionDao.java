@@ -4,10 +4,12 @@ import ca.jrvs.apps.trading.model.domain.Position;
 import ca.jrvs.apps.trading.model.domain.Quote;
 import java.util.List;
 import java.util.Optional;
+import javafx.geometry.Pos;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -39,6 +41,21 @@ public class PositionDao {
   public List<Position> findByTicker(String ticker) {
     String selectSql = "SELECT * FROM " + TABLE_NAME + " WHERE " + TICKER_COLUMN + " =?";
     return jdbcTemplate.query(selectSql, BeanPropertyRowMapper.newInstance(Position.class), ticker);
+  }
+
+  public Optional<Position> findByIdAndTicker(Integer accountId, String ticker) {
+    Optional<Position> entity = Optional.empty();
+    String selectSql = "SELECT * FROM " + TABLE_NAME + " WHERE " + ID_COLUMN + " =? AND " +
+        TICKER_COLUMN + " =?";
+
+    try {
+      entity = Optional.ofNullable(jdbcTemplate.queryForObject(selectSql,
+          BeanPropertyRowMapper.newInstance(Position.class), accountId, ticker));
+    } catch (IncorrectResultSizeDataAccessException e) {
+      logger.debug("Can't find account_id " + accountId + "and ticker " + ticker, e);
+    }
+
+    return entity;
   }
 
   public List<Position> findAll() {

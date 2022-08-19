@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping("/quote")
-public class QuoteContoller {
+public class QuoteController {
   private QuoteService quoteService;
 
   @Autowired
-  public QuoteContoller(QuoteService quoteService) { this.quoteService = quoteService; }
+  public QuoteController(QuoteService quoteService) { this.quoteService = quoteService; }
 
   @GetMapping(path = "/iex/ticker/{ticker}")
   @ResponseStatus(HttpStatus.OK)

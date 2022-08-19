@@ -2,6 +2,10 @@ package ca.jrvs.apps.trading.model.domain;
 
 public class SecurityOrder implements Entity<Integer> {
 
+  public enum Status {
+      FILLED, CANCELLED
+  }
+
   private Integer id;
   private Integer accountId;
   private String status;
@@ -32,6 +36,8 @@ public class SecurityOrder implements Entity<Integer> {
   public String getStatus() {
     return status;
   }
+
+  public void setStatus(Status status) { this.status = String.valueOf(status);}
 
   public void setStatus(String status) {
     this.status = status;
