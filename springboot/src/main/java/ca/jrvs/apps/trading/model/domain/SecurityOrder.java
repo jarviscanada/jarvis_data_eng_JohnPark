@@ -3,7 +3,7 @@ package ca.jrvs.apps.trading.model.domain;
 public class SecurityOrder implements Entity<Integer> {
 
   public enum Status {
-      FILLED, CANCELLED
+      FILLED, CANCELLED, PENDING
   }
 
   private Integer id;
