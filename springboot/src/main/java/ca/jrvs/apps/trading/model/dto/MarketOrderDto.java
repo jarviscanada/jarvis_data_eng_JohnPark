@@ -6,7 +6,6 @@ public class MarketOrderDto {
   private Long size;
   private String ticker;
   private Integer accountId;
-  private String buyOrSell;
 
   public Integer getAccountId() {
     return accountId;

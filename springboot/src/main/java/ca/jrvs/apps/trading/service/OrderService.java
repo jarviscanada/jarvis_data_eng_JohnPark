@@ -77,9 +77,7 @@ public class OrderService {
       handleSellMarketOrder(orderDto, securityOrder, account);
     }
 
-    securityOrderDao.save(securityOrder);
-
-    return securityOrder;
+    return securityOrderDao.save(securityOrder);
   }
 
   /**
