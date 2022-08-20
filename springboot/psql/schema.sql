@@ -1,6 +1,9 @@
 -- psql -h PSQL_HOST -p 5432 -U postgres jrvstrading -f schema.sql
 -- Drop table
 
+\c jrvstrading
+-- \c jrvstrading_test
+
 DROP TABLE IF EXISTS public.trader cascade;
 DROP TABLE IF EXISTS public.account cascade;
 DROP TABLE IF EXISTS public.security_order cascade;
