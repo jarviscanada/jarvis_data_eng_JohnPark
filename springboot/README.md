@@ -64,7 +64,7 @@ The components in green backgrounds are components of the trading application. T
 
 Our application is composed of layers - controller layer, service layer and data access layer. The controllers are what handles the request using the service layers. The service layers handles the business logic of the application. The data access layer is composed of Data Access Objects that interacts with JDBC and converts database resource into a java objects that can be handled and manipulated in java program. 
 
-As one can see, QuoteDao is reponsible for accessing and managing the data from quote table. It then passes the parsed resource to the QuoteService. TraderDao and AccountDao is responsible for accessing and managing the data from account and trader table respectively. The parsed data from the database are passed on to service components to continue their processing. The same goes for ServiceDao and PositionDao. 
+As one can see, QuoteDao is reponsible for accessing and managing the data from the quote table. It then passes the parsed resource to the QuoteService. TraderDao and AccountDao is responsible for accessing and managing the data from account and trader table respectively. The parsed data from the database are passed on to service components to continue their processing. The same goes for ServiceDao and PositionDao. 
 
 Below, MarketDataDao updates the stocks using data obtained from IEX cloud. This is obtained through HTTP client module. 
 
@@ -83,30 +83,45 @@ The swagger is an application that allows users to use a REST API in a convenien
 <!-- 
 What's swagger (1-2 sentences, you can copy from swagger docs). Why are we using it or who will benefit from it? -->
 ### Quote Controller
-- High-level description for this controller. Where is market data coming from (IEX) and how did you cache the quote data (PSQL). Briefly talk about data from within your app
-- briefly explain each endpoint
-  e.g.
-  - GET `/quote/dailyList`: list all securities that are available to trading in this trading system blah..blah..
-### Trader Controller
-- High-level description for trader controller (e.g. it can manage trader and account information. it can deposit and withdraw fund from a given account)
-- briefly explain each endpoint
+- Quote Controller manages and updates quotes. The source of information about updated quotes is IEX Cloud API. When the request of update is received, Quote Controller will command its service component to retrieve information from IEX Cloud API and persist the updated information to Postgres Database. 
+  - GET `/quote/dailyList`: list all securities that are available to trading in this trading system
+  - GET `/quote/iex/ticker/{ticker}`: retrieves IexQuote from the IEX Cloud API
+  - POST `/quote/tickerId/{tickerId}`: creates a new quote with specific ticker id and persist in database
+  - PUT `/quote/`: updates a specifc quote
+  - PUT `/quote/iexMarketData`: updates current quotes in database by parsing iexQuotes obtained from IEX Cloud API
+
+### Trader Account Controller
+- Manages traders and accounts. It allows traders to deposit or withdraw funds from their accounts. It keeps record of funds and trade history in the database
+- briefly explain each endpoint 
+  - DELETE `/trader/traderId/{traderId}`: Deletes a trade with id `traderId`
+  - POST `/trader/`: Creates a new trader - based on information available in body
+  - POST `/trader/firstname/{firstname}/lastname/{lastname}/dob/{dob}/country/{country}/email/{email}`: Creates a new trader by parsing the url
+  - PUT `/trader/deposit/traderId/{traderId}/amount/{amount}`: Deposits a fund to the trader with id `traderId` with amount `amount`
+  - PUT `/trader/withdraw/traderId/{traderId}/amount/{amount}`: Withdraws a fund from the trader with id `traderId` with amount `amount`
+
 ### Order Controller
-- High-level description for this controller.
-- briefly explain each endpoint
-### App controller
-- briefly explain each endpoint
-### Optional(Dashboard controller)
-- High-level description for this controller.
-- briefly explain each endpoint
+- Manages all the orders executed by the system. It allows to make an order and able to retrieve information about it
+  - POST `/order/marketOrder` : Make a new order
+
+### Dashboard controller
+- Manages the profile and portfolio view about a trader. 
+  - GET `/dashboard/portfolio/traderId/{traderId}`: retrieves portfolio view of trader with id `traderId`
+  - GET `/dashboard/profile/traderId/{traderId}`: retrieves profile view of a trader with id `traderId`
+
 
 # Test <a name="Test"></a>
-How did you test your application? Did you use any testing libraries? What's the code coverage?
+Integration tests each component was performed using JUnit4. Mockito was used in places necessary to test specific unit of a component. For the tests, the line coverage of above 60% was maintained for each component
+![](./assets/line_coverage.png)
 
 # Deployment <a name="Deployment"></a>
-- docker diagram including images, containers, network, and docker hub
-e.g. https://www.notion.so/jarviscanada/Dockerize-Trading-App-fc8c8f4167ad46089099fd0d31e3855d#6f8912f9438e4e61b91fe57f8ef896e0
-- describe each image in details (e.g. how psql initialize tables)
+The application was deployed using docker. There is two docker images generated for the Postgres database and the trading application itself. 
+
+The image of Postgres database was generated from the base image `postgres:9.6-alpine`. We let two SQL scripts to be run from the base image to establish the database - `jrvstrading` - and establish tables - `Quote`, `Trader`, `SecurityOrder`, `Account`, `Position`.
+
+The trading application was built by moving the source code to the ` maven:3.6-jdk-8-slim` image for packaging the code into a Uber Jar file. Then, the Uber Jar file was uploaded to `openjdk:8-alpine` to accomplish the container development.
+
 
 # Improvements <a name="Improvements"></a>
-If you have more time, what would you improve?
-- at least 3 improvements
+- Front end of the application would be a great way to perfect the application
+- The trade is not possible outside of 9:30am - 4pm. Make an order outside of those hours with pending status
+- Automate the whole process of running database and the trading application, instead of running each one of them separately
