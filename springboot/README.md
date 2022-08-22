@@ -64,20 +64,24 @@ The components in green backgrounds are components of the trading application. T
 
 Our application is composed of layers - controller layer, service layer and data access layer. The controllers are what handles the request using the service layers. The service layers handles the business logic of the application. The data access layer is composed of Data Access Objects that interacts with JDBC and converts database resource into a java objects that can be handled and manipulated in java program. 
 
+As one can see, QuoteDao is reponsible for accessing and managing the data from quote table. It then passes the parsed resource to the QuoteService. TraderDao and AccountDao is responsible for accessing and managing the data from account and trader table respectively. The parsed data from the database are passed on to service components to continue their processing. The same goes for ServiceDao and PositionDao. 
+
 Below, MarketDataDao updates the stocks using data obtained from IEX cloud. This is obtained through HTTP client module. 
 
  We used Tomcat for webservlet. It functions as an interface between the application and the client. When a client sends a HTTP request to the application, it arrives at the Webservlet. The servlet filters out certain requests and for ones appropriate, it commands controller layers to carry out its work to generate corresponding response.
-
+<!-- 
 - Draw a component diagram that contains controllers, services, DAOs, SQL, IEX Cloud, WebServlet/Tomcat, HTTP client, and SpringBoot. (you must create your own diagram)
 - briefly explain the following components and services (3-5 sentences for each)
   - Controller layer (e.g. handles user requests....)
   - Service layer
   - DAO layer
   - SpringBoot: webservlet/TomCat and IoC
-  - PSQL and IEX
+  - PSQL and IEX -->
 ## REST API Usage 
 ### Swagger
-What's swagger (1-2 sentences, you can copy from swagger docs). Why are we using it or who will benefit from it?
+The swagger is an application that allows users to use a REST API in a convenient way. It lays out all the possible urls and http methods it can take. It also lists out all the model objects which are representation of resources that are persisted in database. 
+<!-- 
+What's swagger (1-2 sentences, you can copy from swagger docs). Why are we using it or who will benefit from it? -->
 ### Quote Controller
 - High-level description for this controller. Where is market data coming from (IEX) and how did you cache the quote data (PSQL). Briefly talk about data from within your app
 - briefly explain each endpoint
