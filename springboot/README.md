@@ -32,15 +32,40 @@ To run the containers, there must be docker network to be used. Run the followin
 ```
 docker network create --driver bridge trading-net
 ```
-- Prequiresites: Docker, CentOS 7
-- Docker scripts with description
-	- build images
-  - create a docker network
-  - start containers
-- Try trading-app with SwaggerUI (screenshot)
+Then, the application can start by running following commands on bash
+```
+# Run our Postgres database container
+docker run -d --name trading-psql \
+-e POSTGRES_USER=$PSQL_USER \
+-e POSTGRES_PASSWORD=$PSQL_PASSWORD \
+-v pgdata:$PGDATA_PATH \
+--network trading-net -p 5432:5432 trading-psql
+
+# Run our trading app container
+docker run -d --name trading-app-dev \
+-e "PSQL_HOST=trading-psql" \
+-e "PSQL_PORT=5432" \
+-e "PSQL_DB=jrvstrading" \
+-e "PSQL_USER=$PSQL_USER" \
+-e "PSQL_PASSWORD=$PSQL_PASSWORD" \
+-e "IEX_PUB_TOKEN=$IEX_PUB_TOKEN" \
+--network trading-net \
+-p 8080:8080 -t trading-app
+```
+The following picture contains example of how the application looks like on swagger-ui when it is ran. Once docker container is ran, application can be seen through a browser on `localhost:8080`
+![Swagger-ui example](./assets/swagger_example.png)
 
 # Implementation <a name="Implementation"></a>
 ## Architecture
+![](./assets/component_diagram.png)
+The components in green backgrounds are components of the trading application. The components in the light blue background is the components in the database.
+
+Our application is composed of layers - controller layer, service layer and data access layer. The controllers are what handles the request using the service layers. The service layers handles the business logic of the application. The data access layer is composed of Data Access Objects that interacts with JDBC and converts database resource into a java objects that can be handled and manipulated in java program. 
+
+Below, MarketDataDao updates the stocks using data obtained from IEX cloud. This is obtained through HTTP client module. 
+
+ We used Tomcat for webservlet. It functions as an interface between the application and the client. When a client sends a HTTP request to the application, it arrives at the Webservlet. The servlet filters out certain requests and for ones appropriate, it commands controller layers to carry out its work to generate corresponding response.
+ 
 - Draw a component diagram that contains controllers, services, DAOs, SQL, IEX Cloud, WebServlet/Tomcat, HTTP client, and SpringBoot. (you must create your own diagram)
 - briefly explain the following components and services (3-5 sentences for each)
   - Controller layer (e.g. handles user requests....)
@@ -48,7 +73,6 @@ docker network create --driver bridge trading-net
   - DAO layer
   - SpringBoot: webservlet/TomCat and IoC
   - PSQL and IEX
-
 ## REST API Usage 
 ### Swagger
 What's swagger (1-2 sentences, you can copy from swagger docs). Why are we using it or who will benefit from it?
