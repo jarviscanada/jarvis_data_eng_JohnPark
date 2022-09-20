@@ -6,8 +6,9 @@ The resources acquired through Azure include, load balancers, application server
 Fianlly, we implemented Jenkins to establish CI/CD pipelines. Through Jenkisfile written in groovy, build, testing, and deployment has been automated. Build includes establishing docker containers and running the application in them. Test ensures the application has the correct functionality. 
 
 # Application Architecture
-- Draw an application architecture (e.g. load balancer, auto-scaling, application server, psql, etc.)
-- Draw a diagram to show your k8s deployment
+![](./assets/application_architecture.png)
+# Kubernetes Architecture
+![](./assets/kubernetes_architecture.png)
 
 # Jenkins CI/CD pipeline
 - `Build` - Docker file builds an image out of the code pushed makes a runnable application
@@ -16,9 +17,7 @@ Fianlly, we implemented Jenkins to establish CI/CD pipelines. Through Jenkisfile
 - `DEV` - Development environment
 - `UAT` - User Acceptance Testing Environment
 - `PROD` - Production environment
-- Describe your CI/CD pipeline (e.g. git clone, build, test, deploy)
-- Visualize your Ci/CD pipeline with a diagram
-
+![](./assets/jenkins_pipeline.png)
 # Improvements
 List at least three improvements
  - Add a automatic checking for code quality. It could be added to the CI/CD pipeline to further complete the application
