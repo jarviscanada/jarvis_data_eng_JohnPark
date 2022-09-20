@@ -19,7 +19,6 @@ Fianlly, we implemented Jenkins to establish CI/CD pipelines. Through Jenkisfile
 - `PROD` - Production environment
 ![](./assets/jenkins_pipeline.png)
 # Improvements
-List at least three improvements
  - Add a automatic checking for code quality. It could be added to the CI/CD pipeline to further complete the application
  - Add a integration testing feature by implementing tools designed for it. Ex. Selenium
  - Currently, to initiate CI/CD pipeline, one needs to manually initiate it. It could be improved by initiated it as soon as code push has been made. 
