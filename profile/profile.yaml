@@ -55,9 +55,9 @@ jarvis_projects:
       - "Twitter App: Created a Java application which allows a user to Create, Read, and Delete tweets. The application interacts with Twitter's REST API using HTTP requests and responses. The response from Twitter REST API is parsed and the requested information is properly returned to the user. All the relevant dependencies, classes and components are put together using SpringBoot. Junit and Mockito were used for integration and unit tests. Finally, the application is deployed using Docker and hosted on Dockerhub"
       - "JDBC App: Implemented JDBC App which connects to the Postgres SQL database. The application is implemented using the DAO pattern thereby containing an isolated application/business layer from the database. The DAO objects created here are CustomerDAO and OrderDAO. After the application establishes a connection with the SQL database, it mounts the JDBC driver using the database connection manager. This application can Create, Read, Update, and Delete data from a Postgres SQL database containing data about customers and orders."
       - "Grep App: Built a java application with equivalent functionality to the Unix-based command-line utility \"grep\". The application takes a regex pattern to match, a path to a file, and an output file as arguments. Then, it finds the line(s) containing the inputted regex pattern from the source file and writes on the output file given. Using Maven, the application and its relevant dependencies are compiled into an Uber Jar file which was then dockerized and deployed on the Dockerhub."
-  #- name: "Springboot App"
-    #git_url: "/springboot"
-    #description: ""
+  - name: "Springboot App"
+    git_url: "/springboot"
+    description: "Built a REST API based on microservice architecture. The API manages accounts and trade orders and updates stock information by fetching information from IEX Cloud. Java was used to develop the application and Postgres SQL was used to establish a database. Then, Spring Boot was used to consolidating all the microservice components together. Therefore, Inversion of Control through Dependency Injection was attained by the Spring framework. Maven was used to managing all the dependencies and integration tests were done through JUnit4 and Mockito. Two docker images were generated - Trading-app and Trading-psql - and were deployed on Dockerhub."
   #- name: "Python Data Analytics"
     #git_url: "/python_data_anlytics"
     #description: ""
@@ -67,9 +67,9 @@ jarvis_projects:
   #- name: "Spark"
     #git_url: "/spark"
     #description: ""
-  #- name: "Cloud/DevOps"
-    #git_url: "/cloud_devops"
-    #description: ""
+  - name: "Cloud/DevOps"
+    git_url: "/cloud_devops"
+    description: "Migrated an application to the cloud using Azure. Established ad scale set and database server using Azure. The network is configured so that the database server is only accessible through the application. The application is accessible externally through the load balancer which hosts an external IP address. The application is accessible Built a Jenkins CI/CD pipeline to automate build, deploy, test etc."
 
 # List of personal or academic projects
 # Feel free to add more projects

@@ -52,6 +52,16 @@
       ],
       "git_url": "/core_java",
       "name": "Core Java Apps"
+    },
+    {
+      "description": "Built a REST API based on microservice architecture. The API manages accounts and trade orders and updates stock information by fetching information from IEX Cloud. Java was used to develop the application and Postgres SQL was used to establish a database. Then, Spring Boot was used to consolidating all the microservice components together. Therefore, Inversion of Control through Dependency Injection was attained by the Spring framework. Maven was used to managing all the dependencies and integration tests were done through JUnit4 and Mockito. Two docker images were generated - Trading-app and Trading-psql - and were deployed on Dockerhub.",
+      "git_url": "/springboot",
+      "name": "Springboot App"
+    },
+    {
+      "description": "Migrated an application to the cloud using Azure. Established ad scale set and database server using Azure. The network is configured so that the database server is only accessible through the application. The application is accessible externally through the load balancer which hosts an external IP address. The application is accessible Built a Jenkins CI/CD pipeline to automate build, deploy, test etc.",
+      "git_url": "/cloud_devops",
+      "name": "Cloud/DevOps"
     }
   ],
   "name": "John Park",
