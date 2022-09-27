@@ -69,7 +69,7 @@ jarvis_projects:
     #description: ""
   - name: "Cloud/DevOps"
     git_url: "/cloud_devops"
-    description: "In progress"
+    description: "Migrated an application to the cloud using Azure. Established ad scale set and database server using Azure. The network is configured so that the database server is only accessible through the application. The application is accessible externally through the load balancer which hosts an external IP address. The application is accessible Built a Jenkins CI/CD pipeline to automate build, deploy, test etc."
 
 # List of personal or academic projects
 # Feel free to add more projects
