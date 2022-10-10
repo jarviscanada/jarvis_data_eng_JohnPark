@@ -93,4 +93,11 @@ public class DashboardService {
         .orElseThrow(() -> new IllegalArgumentException("Invalid traderId"));
   }
 
+  /**
+   * Finds and returns all traders from database
+   */
+  public List<Trader> getTraders() {
+    return traderDao.findAll();
+  }
+
 }

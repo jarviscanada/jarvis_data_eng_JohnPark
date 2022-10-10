@@ -31,10 +31,6 @@ public class TraderAccountService {
     this.securityOrderDao = securityOrderDao;
   }
 
-//  public static void main(String[] args) {
-//    BasicDataSource
-//    TraderAccountService traderAccountService = new TraderAccountService(new TraderDao())
-//  }
 
   /**
    * Create a new trader and initialize a new account with 0 amount.
