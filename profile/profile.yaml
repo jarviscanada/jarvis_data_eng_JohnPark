@@ -57,7 +57,7 @@ jarvis_projects:
       - "Grep App: Built a java application with equivalent functionality to the Unix-based command-line utility \"grep\". The application takes a regex pattern to match, a path to a file, and an output file as arguments. Then, it finds the line(s) containing the inputted regex pattern from the source file and writes on the output file given. Using Maven, the application and its relevant dependencies are compiled into an Uber Jar file which was then dockerized and deployed on the Dockerhub."
   - name: "Springboot App"
     git_url: "/springboot"
-    description: "Built a REST API based on microservice architecture. The API manages accounts and trade orders and updates stock information by fetching information from IEX Cloud. Java was used to develop the application and Postgres SQL was used to establish a database. Then, Spring Boot was used to consolidating all the microservice components together. Therefore, Inversion of Control through Dependency Injection was attained by the Spring framework. Maven was used to managing all the dependencies and integration tests were done through JUnit4 and Mockito. Two docker images were generated - Trading-app and Trading-psql - and were deployed on Dockerhub."
+    description: "Built a REST API based on microservice architecture. The API manages accounts and trade orders and updates stock information by fetching information from IEX Cloud. Java was used to develop the application and Postgres SQL was used to establish a database. Then, Spring Boot was used to consolidate all the microservice components together. Therefore, Inversion of Control through Dependency Injection was attained by the Spring framework. Maven was used to manage all the dependencies and integration tests were done through JUnit4 and Mockito. Two docker images were generated - Trading-app and Trading-psql - and were deployed on Dockerhub."
   #- name: "Python Data Analytics"
     #git_url: "/python_data_anlytics"
     #description: ""
@@ -67,9 +67,12 @@ jarvis_projects:
   #- name: "Spark"
     #git_url: "/spark"
     #description: ""
+  - name: "Frontend React App"
+    git_url: "/frontend"
+    description: "Built a frontend application for Springboot App. It provides a friendly user-interface so one can interact with the API through mouse click and typing. Node and React was used to b uild this application. This application allows to add and delete a trader. Furthermore, for each trader, one can add or withdraw funds thourgh account page of the application. Finally, the application is deployed on Github and Docker."
   - name: "Cloud/DevOps"
     git_url: "/cloud_devops"
-    description: "Migrated an application to the cloud using Azure. Established ad scale set and database server using Azure. The network is configured so that the database server is only accessible through the application. The application is accessible externally through the load balancer which hosts an external IP address. The application is accessible Built a Jenkins CI/CD pipeline to automate build, deploy, test etc."
+    description: "Migrated an application to the cloud using Azure. Established a scale set and database server using Azure. The network is configured so that the database server is only accessible through the application. The application is accessible externally through the load balancer which hosts an external IP address. The application is accessible Built a Jenkins CI/CD pipeline to automate build, deploy, test etc."
 
 # List of personal or academic projects
 # Feel free to add more projects
